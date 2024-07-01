@@ -1,24 +1,25 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
-    color: "black",
+    color: 'black',
   },
   logoContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    flex: 1 / 2,
   },
   logo: {
-    width: 150,
-    resizeMode: "contain",
+    width: '100%',
+    resizeMode: 'contain',
+    flex: 1 / 4,
   },
   iconContainer: {
     position: 'absolute',
@@ -47,66 +48,65 @@ export const styles = StyleSheet.create({
   listingsContainer: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#f8f8f8",
-    width: '100%'
+    backgroundColor: '#f8f8f8',
+    width: '100%',
   },
   listingsCard: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
     marginVertical: 10,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 10,
     elevation: 5,
     borderRadius: 25,
     width: '100%',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   listingsTitle: {
     fontSize: 22,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
     marginBottom: 5,
   },
   listingsImage: {
-    width: "100%",
+    width: '100%',
     height: 250,
     borderRadius: 25,
   },
   listingsDescription: {
     flex: 1,
     fontSize: 14,
-    color: "white",
+    color: 'white',
   },
   listingsTextContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     padding: 15,
-    width: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
   listingsHoursContainer: {
-    position: "absolute",
+    position: 'absolute',
     top: 10,
     right: 10,
-    backgroundColor: "rgba( 0, 0, 0, 0.5)",
+    backgroundColor: 'rgba( 0, 0, 0, 0.5)',
     padding: 15,
     borderRadius: 50,
   },
   listingsHours: {
-    color: "white",
+    color: 'white',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   listingsSmallTextContainer: {
-    width: "100%",
-    flexDirection: "row",
+    width: '100%',
+    flexDirection: 'row',
   },
   left: {
-    textAlign: "right",
+    textAlign: 'right',
   },
 });
-
