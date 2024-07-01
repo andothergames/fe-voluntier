@@ -2,12 +2,12 @@ import { View, Image } from "react-native";
 import { styles } from "../styles";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/tabs/HomeScreen";
-import BadgesScreen from "../screens/tabs/BadgesScreen";
-import MyListingsScreen from "../screens/tabs/MyListingsScreen";
+import HomeScreen from "../screens/HomeScreen";
+import BadgesScreen from "../screens/BadgesScreen";
+import MyListingsScreen from "../screens/MyListingsScreen";
 
-const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 const homeIcon = require("../assets/home-icon.png");
 const myListingsIcon = require("../assets/my-listings-icon.png");
 const badgeIcon = require("../assets/badge-icon.png");
