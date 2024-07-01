@@ -1,53 +1,70 @@
-import { StatusBar } from "expo-status-bar";
 import { View, Image } from "react-native";
 import { styles } from "../styles";
+import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import Home from "./Home";
-import MyListings from "./MyListings";
-import Badges from "./Badges";
+import HomeScreen from "../screens/tabs/HomeScreen";
+import BadgesScreen from "../screens/tabs/BadgesScreen";
+import MyListingsScreen from "../screens/tabs/MyListingsScreen";
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+const homeIcon = require("../assets/home-icon.png");
+const myListingsIcon = require("../assets/my-listings-icon.png");
+const badgeIcon = require("../assets/badge-icon.png");
+
+
+const TabNavigator = () => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="TabHome"
+        component={HomeScreen}
+        options={{
+          title: "Home",
+          tabBarIcon: ({ focused }) => (
+            <Image source={homeIcon} style={{ height: 30, width: 30 }} />
+          ),
+        }}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="TabMyListings"
+        component={MyListingsScreen}
+        options={{
+          title: "My Listings",
+          tabBarIcon: ({ focused }) => (
+            <Image source={myListingsIcon} style={{ height: 30, width: 30 }} />
+          ),
+        }}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="TabBadges"
+        component={BadgesScreen}
+        options={{
+          title: "Badges",
+          tabBarIcon: ({ focused }) => (
+            <Image source={badgeIcon} style={{ height: 30, width: 30 }} />
+          ),
+        }}
+      ></Tab.Screen>
+    </Tab.Navigator>
+  );
+}
+
+
+const StackNavigatior = () => {
+    return (
+        <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={TabNavigator}
+        options={{ headerShown: false }}
+        />
+    </Stack.Navigator>
+  );
+};
 
 export default function Nav() {
-  const Tab = createBottomTabNavigator();
-
   return (
-    <View style={styles.container}>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-
-              if (route.name === "Home") {
-                iconName = require("../assets/home-icon.png");
-              } else if (route.name === "My Listings") {
-                iconName = require("../assets/my-listings-icon.png");
-              } else if (route.name === "Badges") {
-                iconName = require("../assets/badge-icon.png");
-              }
-
-              return (
-                <Image
-                  source={iconName}
-                  style={{ width: size, height: size, tintColor: color }}
-                  resizeMode="contain"
-                />
-              );
-            },
-            tabBarActiveTintColor: "tomato",
-            tabBarInactiveTintColor: "gray",
-            tabBarStyle: {
-              justifyContent: "space-between",
-              paddingHorizontal: 30,
-            },
-          })}
-        >
-          <Tab.Screen name="Home" component={Home} />
-          <Tab.Screen name="My Listings" component={MyListings} />
-          <Tab.Screen name="Badges" component={Badges} />
-        </Tab.Navigator>
-        <StatusBar style="auto" />
-      </NavigationContainer>
-    </View>
+        <StackNavigatior />
   );
 }
