@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native-web";
+import { View, Text, Image } from "react-native";
 import { styles } from "../styles";
 
 
