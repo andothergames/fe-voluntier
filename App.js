@@ -11,7 +11,7 @@ export default function App() {
       <TopNav />
       <Header />
       <Listings />
-      {/* <Nav /> */}
+      <Nav />
     </View>
   );
 }
