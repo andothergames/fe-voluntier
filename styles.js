@@ -15,12 +15,10 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     flex: 1,
-    height: undefined
   },
   logo: {
     width: 150,
     resizeMode: "contain",
-    height: undefined
   },
   iconContainer: {
     position: 'absolute',
