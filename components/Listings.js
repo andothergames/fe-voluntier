@@ -10,8 +10,8 @@ export default function Listings() {
 
   useEffect(() => {
     getListings()
-      .then((articles) => {
-        setListings(articles);
+      .then((listings) => {
+        setListings(listings);
       })
       .catch((error) => {
         console.log(error);
@@ -19,7 +19,6 @@ export default function Listings() {
       });
   }, []);
 
-  console.log(listings);
 
   return (
     <View style={styles.listingsContainer}>

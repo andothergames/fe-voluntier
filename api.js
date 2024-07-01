@@ -6,7 +6,7 @@ const voluntierApi = axios.create({
 
 export const getListings = () => {
     return voluntierApi.get('/listings').then(({data}) => {
-        return data.articles
+        return data.listings
     })
 }
 
