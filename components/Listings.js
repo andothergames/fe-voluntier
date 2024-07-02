@@ -7,7 +7,7 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native';
-import { styles } from '../styles';
+import { listingStyles } from '../styles/listingStyles';
 import { useEffect, useState } from 'react';
 import { getListings } from '../api';
 import ListingCard from './ListingCard';
@@ -42,7 +42,7 @@ export default function Listings() {
 
 
   return (
-    <View style={styles.listingsContainer}>
+    <View style={listingStyles.container}>
       <ScrollView>
         {listings.map((listing) => (
           <Pressable key={listing.list_id}

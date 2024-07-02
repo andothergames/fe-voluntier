@@ -1,5 +1,6 @@
 import { View, Text } from "react-native";
-import { styles } from "../styles";
+import { listingStyles } from "../styles/listingStyles";
+import { appStyles } from "../styles/appStyles"
 
 
 export default function SingleListing( { route }) {
@@ -7,8 +8,8 @@ export default function SingleListing( { route }) {
   const { listing } = route.params 
 
   return (
-    <View style={styles.container}>
-    <Text style={styles.title}>{listing.title}</Text>
+    <View style={appStyles.container}>
+    <Text style={listingStyles.title}>{listing.title}</Text>
     <Text>{listing.description}</Text>
     <Text>in the single listing</Text>
   </View>
