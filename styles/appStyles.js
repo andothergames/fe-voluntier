@@ -15,5 +15,15 @@ export const styles = StyleSheet.create({
   text: {
     color: "black",
   },
+  image: {
+    width: 375,
+    height: 200,
+    marginBottom: 20, 
+  },
+  aboutHeader: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
 });
 
