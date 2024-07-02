@@ -1,9 +1,10 @@
 import { View, Text } from "react-native";
+import BadgesToCollect from '../components/BadgesToCollect'
 
 export default function BadgesScreen() {
   return (
     <View>
-      <Text>badges hello</Text>
+      <BadgesToCollect />
     </View>
   );
 }

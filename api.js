@@ -21,3 +21,10 @@ export const logout = () => {
     return;
   })
 };
+
+export const getBadges = () => {
+  return voluntierApi.get('badges').then(({ data }) => {
+    return data.badges
+
+  })
+}
