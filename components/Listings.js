@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-} from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
 import { styles } from '../styles';
 import { useEffect, useState } from 'react';
 import { getListings } from '../api';
@@ -28,13 +21,16 @@ export default function Listings() {
 
   return (
     <View style={styles.listingsContainer}>
-      <ScrollView>
-        {listings.map((listing) => (
-          <ListingCard
-            key={listing.list_id}
-            listing={listing}></ListingCard>
-        ))}
-      </ScrollView>
+      <FlatList
+        data={listings}
+        renderItem={(item) => {
+          // console.log(item, 'here item');
+          return <ListingCard listing={item.item}></ListingCard>;
+        }}
+        keyExtractor={(item, index) => {
+          return index.toString();
+        }}
+      />
     </View>
   );
 }
