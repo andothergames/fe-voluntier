@@ -14,8 +14,8 @@ export default function HomeScreen() {
   const [filterKeyWord, setFilterKeyWord] = useState('')
   return (
     <View style={styles.container}>
-      <TopNav />
-      <Header />
+      {/* <TopNav />
+      <Header /> */}
       <SearchBar />
       <Listings />
     </View>
