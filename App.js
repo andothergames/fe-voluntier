@@ -1,4 +1,4 @@
-import { styles } from "./styles"; 
+import { styles } from "./styles/appStyles"; 
 import { NavigationContainer } from "@react-navigation/native";
 import { View } from "react-native";
 import Header from "./components/Header";

@@ -1,12 +1,12 @@
-import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
-import { styles } from '../styles';
-import { useEffect, useState } from 'react';
-import { getListings } from '../api';
-import ListingCard from './ListingCard';
+import { View, FlatList } from "react-native";
+import { listingStyles } from "../styles/listingStyles";
+import { useEffect, useState } from "react";
+import { getListings } from "../api";
+import ListingCard from "./ListingCard";
 
 export default function Listings() {
   const [listings, setListings] = useState([]);
-  const [err, setErr] = useState('');
+  const [err, setErr] = useState("");
 
   useEffect(() => {
     getListings()
@@ -20,11 +20,10 @@ export default function Listings() {
   }, []);
 
   return (
-    <View style={styles.listingsContainer}>
+    <View style={listingStyles.container}>
       <FlatList
         data={listings}
         renderItem={(item) => {
-          // console.log(item, 'here item');
           return <ListingCard listing={item.item}></ListingCard>;
         }}
         keyExtractor={(item, index) => {

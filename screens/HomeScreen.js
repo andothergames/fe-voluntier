@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { styles } from "../styles";
+import { styles } from "../styles/appStyles";
 import Header from '../components/Header';
 import TopNav from '../components/Top-Nav';
 import Listings from '../components/Listings';

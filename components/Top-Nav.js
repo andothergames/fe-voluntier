@@ -1,15 +1,15 @@
-import { View, Text, Image } from 'react-native';
-import { styles } from '../styles';
+import { View, Image } from 'react-native';
+import { headerStyles } from '../styles/headerStyles';
 
 export default function TopNav() {
   return (
-    <View style={styles.iconContainer}>
+    <View style={headerStyles.iconContainer}>
       <Image
         source={require('../assets/settings-icon.png')}
-        style={styles.settingsIcon}></Image>
+        style={headerStyles.settingsIcon}></Image>
       <Image
         source={require('../assets/account-icon.png')}
-        style={styles.accountIcon}></Image>
+        style={headerStyles.accountIcon}></Image>
     </View>
   );
 }
