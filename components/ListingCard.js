@@ -1,16 +1,16 @@
-import { View, Text, Image } from "react-native";
-import { listingStyles } from "../styles/listingStyles";
+import { View, Text, Image } from 'react-native';
+import { listingStyles } from '../styles/listingStyles';
 
 export default function ListingCard({ listing }) {
+  console.log(listing, 'herelisting');
   return (
     <View style={listingStyles.card}>
       <View>
         <Image
-          source={require("../assets/listing-image.jpg")}
-          style={listingStyles.image}
-        ></Image>
+          source={require('../assets/listing-image.jpg')}
+          style={listingStyles.image}></Image>
       </View>
-      <View style={listingStyles.smallTextContainer}>
+      <View style={listingStyles.textContainer}>
         <Text style={listingStyles.title}>
           {listing.list_title} {listing.org_name}
         </Text>
