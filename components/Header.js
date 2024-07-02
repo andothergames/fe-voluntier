@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderWidth: 1,
     borderColor: 'red',
+    marginTop: 40,
   },
   logoContainer: {
     flex: 1,
