@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import BadgesScreen from "../screens/BadgesScreen";
 import MyListingsScreen from "../screens/MyListingsScreen";
+import HomeStack from "./HomeStack";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -18,7 +19,7 @@ const TabNavigator = () => {
     <Tab.Navigator>
       <Tab.Screen
         name="TabHome"
-        component={HomeScreen}
+        component={HomeStack}
         options={{
           title: "Home",
           tabBarIcon: ({ focused }) => (

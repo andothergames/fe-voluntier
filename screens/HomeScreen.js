@@ -5,6 +5,7 @@ import TopNav from '../components/Top-Nav';
 import Listings from '../components/Listings';
 import SearchBar from '../components/SearchBar';
 import { useState } from 'react';
+import { NavigationContainer } from "@react-navigation/native";
 
 
 export default function HomeScreen() {
