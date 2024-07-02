@@ -1,8 +1,6 @@
 import { View, Image, Text } from "react-native";
-import { styles } from "../styles/appStyles";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
 import BadgesScreen from "../screens/BadgesScreen";
 import MyListingsScreen from "../screens/MyListingsScreen";
 import HomeStack from "./HomeStack";
