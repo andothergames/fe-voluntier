@@ -1,6 +1,15 @@
 import { View, Image, StyleSheet, Pressable } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
+import Login from './Login';
 
 export default function Header() {
+
+  const navigation = useNavigation();
+
+  const navigateToLogin= () => {
+    navigation.navigate("Login");
+  }
+
   return (
     <View style={styles.headerContainer}>
       <View style={styles}>
@@ -16,9 +25,11 @@ export default function Header() {
       </View>
 
       <View style={styles}>
+        <Pressable onPress={navigateToLogin}>
         <Image
           source={require('../assets/account-icon.png')}
           style={styles.accountIcon}></Image>
+        </Pressable>
       </View>
     </View>
   );
