@@ -1,26 +1,28 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "../screens/HomeScreen";
+import DrawerNavigator from "./Settings-Dropdown";
 import SingleListing from "./SingleListing";
 import Login from "./Login";
 
+
 const Stack = createStackNavigator();
+
 
 export default function HomeStack() {
   return (
-    <Stack.Navigator initialRouteName="HomeScreen">
+    <Stack.Navigator initialRouteName="DrawerNavigator">
       <Stack.Screen
-        name="HomeScreen"
-        component={HomeScreen}
+        name="DrawerNavigator"
+        component={DrawerNavigator} 
         options={{
-          headerTitle: null,
-          headerBackTitleVisible: false,
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="SingleListing"
         component={SingleListing}
         options={{
-          headerTitle: null,
+          headerTitle: '',
+          headerBackTitleVisible: false,
         }}
       />
       <Stack.Screen
@@ -28,6 +30,7 @@ export default function HomeStack() {
         component={Login}
         options={{
           headerTitle: null,
+          headerBackTitleVisible: false,
         }}
       />
     </Stack.Navigator>
