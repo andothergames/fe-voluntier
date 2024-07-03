@@ -12,13 +12,19 @@ export const getListings = () => {
 
 export const login = (body) => {
   return voluntierApi.post('login', body).then(({ data }) => {
-    console.log(data);
+    return(data);
+  }).catch((error) => {
+    return error;
+
   })
 };
 
 export const logout = () => {
   return voluntierApi.delete('logout').then(() => {
     return;
+  }).catch((error) => {
+    return error;
+
   })
 };
 
