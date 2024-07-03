@@ -20,8 +20,8 @@ export const loginStyles = StyleSheet.create({
     marginBottom: 8,
   },
   title: {
-    marginTop: 20,
-    marginBottom: 40,
+    marginTop: 10,
+    marginBottom: 20,
     textAlign: "center",
     fontSize: 20,
     color: "#001FFF",
@@ -42,6 +42,10 @@ export const loginStyles = StyleSheet.create({
     color: "#fff",
     textAlign: 'center'
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   inputControl: {
     backgroundColor: "#fff",
     paddingVertical: 10,
@@ -54,6 +58,7 @@ export const loginStyles = StyleSheet.create({
   switch: {
     marginLeft: 'auto',
     marginRight: 10,
+    transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
   },
   switchText: {
     color: '#383838',
