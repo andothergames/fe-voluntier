@@ -43,3 +43,9 @@ export const getMyBadges = (volId) => {
     return data.badges;
   });
 };
+
+export const getBadgeLeaderboard = () => {
+  return voluntierApi.get('leaderboard').then(({ data }) => {
+    return data.leaderboard
+  })
+}
