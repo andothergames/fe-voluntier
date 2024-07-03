@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { getBadges } from "../api";
 import { badgeStyles } from "../styles/badgeStyles";
@@ -14,9 +14,9 @@ export default function BadgesToCollect() {
 
   return (
     <View style={badgeStyles.container}>
-      <View>
         <Text style={{ fontWeight: "bold" }}> Badges To Collect:</Text>
-      </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+
 
       <View style={badgeStyles.badgesContainer}>
         {badgesToCollect.map((badge) => (
@@ -33,6 +33,7 @@ export default function BadgesToCollect() {
           </View>
         ))}
       </View>
+      </ScrollView>
     </View>
   );
 }
