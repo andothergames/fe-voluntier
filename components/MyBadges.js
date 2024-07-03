@@ -1,17 +1,10 @@
 import { View, Text, Image, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
-import { getBadges, getMyBadges } from "../api";
+import { getMyBadges } from "../api";
 import { badgeStyles } from "../styles/badgeStyles";
 
-export default function BadgesToCollect() {
-  const [badgesToCollect, setBadgesToCollect] = useState([]);
+export default function MyBadges() {
   const [myBadges, setMyBadges] = useState([]);
-
-  useEffect(() => {
-    getBadges().then((badges) => {
-      setBadgesToCollect(badges);
-    });
-  }, []);
 
   useEffect(() => {
     getMyBadges(1).then((badges) => {
@@ -19,18 +12,12 @@ export default function BadgesToCollect() {
     });
   }, []);
 
-  const myBadgesIds = myBadges.map((badge) => badge.badge_id);
-
-  const filteredBadgesToCollect = badgesToCollect.filter(
-    (badge) => !myBadgesIds.includes(badge.badge_id)
-  );
-
   return (
     <View style={badgeStyles.container}>
-      <Text style={{ fontWeight: "bold" }}> Badges To Collect:</Text>
+      <Text style={{ fontWeight: "bold" }}> My Badges: </Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={badgeStyles.badgesContainer}>
-          {filteredBadgesToCollect.map((badge) => (
+          {myBadges.map((badge) => (
             <View key={badge.badge_id} style={badgeStyles.badgeItem}>
               <Image
                 source={require("../assets/example-badge.png")}
