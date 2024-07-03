@@ -6,11 +6,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { loginStyles } from "../styles/loginStyles";
 
 export default function Login() {
-  // FOR TESTING: this is a valid user to log into the app
-  //   const loginInfoForTesting = {
+  // FOR TESTING: this is a valid user to log into the app as vol/org
+  // as vol:
   //     email: "mattydemail@email.com",
-  //     password: "mybadpassword",
-  //   };
+  //     password: "mybadpassword"
+  // as org:
+  //     email: "oxfam@email.com",
+  //     password: "mybadpassword"
 
   const { user, setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
@@ -21,7 +23,7 @@ export default function Login() {
   const [switchText, setSwitchText] = useState(`Switch to ${oppRole}`);
   const [isEnabled, setIsEnabled] = useState(false);
 
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   useEffect(() => {
     const newRole = isEnabled ? "organisation" : "volunteer";
@@ -58,22 +60,23 @@ export default function Login() {
   const handleSubmitLogout = () => {
     logout().then(() => {
       setMessage(`You have logged out`);
+      setUser(null);
     });
   };
 
   return (
     <SafeAreaView style={loginStyles.container}>
-        <View style={loginStyles.form}>
-            <Text style={loginStyles.title}>{`Sign in as ${role}`}</Text>
-      <Switch
-        style={loginStyles.switch}
-        trackColor={{ false: "#767577", true: "#001FFF" }}
-        thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
-        ios_backgroundColor="#7BB9F8"
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      />
-      <Text style={loginStyles.switchText}>{switchText}</Text>
+      <View style={loginStyles.form}>
+        <Text style={loginStyles.title}>{`Sign in as ${role}`}</Text>
+        <Switch
+          style={loginStyles.switch}
+          trackColor={{ false: "#767577", true: "#001FFF" }}
+          thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
+          ios_backgroundColor="#7BB9F8"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+        <Text style={loginStyles.switchText}>{switchText}</Text>
         <View style={loginStyles.input}>
           <Text style={loginStyles.inputLabel}>Email address</Text>
           <TextInput
@@ -93,12 +96,12 @@ export default function Login() {
         </View>
         <Text style={loginStyles.error}>{message}</Text>
         <View style={loginStyles.buttonContainer}>
-        <Pressable onPress={handleSubmitLogin} style={loginStyles.button}>
-          <Text style={loginStyles.white}>Login</Text>
-        </Pressable>
-        <Pressable onPress={handleSubmitLogout} style={loginStyles.button}>
-          <Text style={loginStyles.white}>Logout</Text>
-        </Pressable>
+          <Pressable onPress={handleSubmitLogin} style={loginStyles.button}>
+            <Text style={loginStyles.white}>Login</Text>
+          </Pressable>
+          <Pressable onPress={handleSubmitLogout} style={loginStyles.button}>
+            <Text style={loginStyles.white}>Logout</Text>
+          </Pressable>
         </View>
       </View>
     </SafeAreaView>
