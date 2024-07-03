@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
 
 export const badgeStyles = StyleSheet.create({
   container: {
@@ -6,7 +7,7 @@ export const badgeStyles = StyleSheet.create({
   },
   badgesContainer: {
     flexDirection: "row",
-    flexWrap: "wrap",
+    flexWrap: "nowrap",
     justifyContent: "flex-start",
   },
   badgeItem: {
@@ -20,11 +21,14 @@ export const badgeStyles = StyleSheet.create({
   },
   badgeTextContainer: {
     alignItems: "center",
+    width: 100
   },
   badgeName: {
     fontWeight: "bold",
+    flexWrap: 'wrap',
+    textAlign: "center"
+
   },
   badgePoints: {
     color: "gray",
-  },
-});
+  }})
