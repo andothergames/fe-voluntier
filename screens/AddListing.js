@@ -6,21 +6,27 @@ import {
   View,
   Pressable,
   FlatList,
+  Button,
+  SafeAreaView,
 } from 'react-native';
 import axios from 'axios';
 import { DropDown } from '../components/DropDownPicker';
+import { TextInputMask } from 'react-native-masked-text';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function AddListing() {
   const [listingTitle, setListingTitle] = useState('');
   const [location, setLocation] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState(new Date());
   const [duration, setDuration] = useState('');
   const [description, setDescription] = useState('');
-  const [skills, setSkills] = useState('');
   const [skillsOption, setSkillsOption] = useState([]);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [mode, setMode] = useState('date');
 
   useEffect(() => {
     getSkillsOptions().then((data) => {
@@ -37,7 +43,34 @@ export default function AddListing() {
 
   const handleImageUpload = () => {};
 
-  const handleSubmitListing = () => {};
+  const handleSubmitListing = () => {
+    console.log(time, 'time here');
+  };
+
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
+  };
+
+  const handleTimeChange = (event, selectedTime) => {
+    const currentTime = selectedTime || time;
+    setShowTimePicker(false);
+    setTime(currentTime);
+  };
+
+  const showMode = (currentMode) => {
+    setShowDatePicker(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
 
   const renderFormFields = () => {
     return (
@@ -61,25 +94,60 @@ export default function AddListing() {
         />
 
         <Text style={styles.label}>Date</Text>
-        <TextInput
-          style={styles.inputField}
-          placeholder="Date"
-          value={date}
-          onChangeText={(input) => setDate(input)}
+
+        <Button
+          title="Open Date Picker"
+          onPress={showDatepicker}
         />
 
-        <Text style={styles.label}>Time</Text>
         <TextInput
           style={styles.inputField}
-          placeholder="Time"
-          value={time}
-          onChangeText={(input) => setTime(input)}
+          placeholder="Select Date"
+          value={date.toDateString()}
+          editable={false}
+          pointerEvents="none"
         />
 
-        <Text style={styles.label}>Duration</Text>
+        {showDatePicker && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={mode}
+            is24Hour={true}
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
+
+        <Text style={styles.label}>Start Time</Text>
+        <Button
+          title="Open Time Picker"
+          onPress={() => setShowTimePicker(true)}
+        />
         <TextInput
           style={styles.inputField}
-          placeholder="Duration"
+          placeholder="Select Time"
+          value={time.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+          editable={false}
+          pointerEvents="none"
+        />
+        {showTimePicker && (
+          <DateTimePicker
+            value={time}
+            mode="time"
+            is24Hour={true}
+            display="default"
+            onChange={handleTimeChange}
+          />
+        )}
+
+        <Text style={styles.label}>Duration in hours</Text>
+        <TextInput
+          style={styles.inputField}
+          placeholder="A number between 1 and 8"
           value={duration}
           onChangeText={(input) => setDuration(input)}
         />
@@ -87,7 +155,7 @@ export default function AddListing() {
         <Text style={styles.label}>Description</Text>
         <TextInput
           style={styles.inputField}
-          placeholder="Description"
+          placeholder="A quick description of the job"
           value={description}
           onChangeText={(input) => setDescription(input)}
         />
@@ -98,7 +166,7 @@ export default function AddListing() {
           <Text style={styles.buttonText}>Upload Image</Text>
         </Pressable>
 
-        <Text style={styles.label}>Skills</Text>
+        <Text style={styles.label}>Skills required</Text>
         <DropDown
           open={open}
           value={value}
@@ -176,102 +244,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-//   return (
-//     <View style={styles.formContainer}>
-//       <Text style={styles.heading}>Create a new listing</Text>
-
-//       <Text style={styles.label}>Listing Title</Text>
-//       <TextInput
-//         style={styles.inputField}
-//         placeholder="listing title"
-//         value={listingTitle}
-//         onChangeText={(input) => setListingTitle(input)}
-//       />
-//       <Text style={styles.label}>Location</Text>
-//       <TextInput
-//         style={styles.inputField}
-//         placeholder="location"
-//         value={location}
-//         onChangeText={(input) => setLocation(input)}
-//       />
-//       <Text style={styles.label}>Date</Text>
-//       <TextInput
-//         style={styles.inputField}
-//         placeholder="date"
-//         value={date}
-//         onChangeText={(input) => setDate(input)}
-//       />
-//       <Text style={styles.label}>Time</Text>
-//       <TextInput
-//         style={styles.inputField}
-//         placeholder="time"
-//         value={time}
-//         onChangeText={(input) => setTime(input)}
-//       />
-//       <Text style={styles.label}>Duration</Text>
-//       <TextInput
-//         style={styles.inputField}
-//         placeholder="duration"
-//         value={duration}
-//         onChangeText={(input) => setDuration(input)}
-//       />
-//       <Text style={styles.label}>Description</Text>
-//       <TextInput
-//         style={styles.inputField}
-//         placeholder="description"
-//         value={description}
-//         onChangeText={(input) => setDescription(input)}
-//       />
-//       <Pressable
-//         onPress={handleImageUpload}
-//         style={styles.inputField}>
-//         <Text style={styles.button}>Image Upload</Text>
-//       </Pressable>
-//       <Text style={styles.label}>Skills</Text>
-//       <DropDown
-//         open={open}
-//         value={value}
-//         items={skillsOption}
-//         setOpen={setOpen}
-//         setValue={setValue}
-//         setItems={setSkillsOption}
-//       />
-
-//       <Pressable
-//         onPress={handleSubmitListing}
-//         style={styles.button}>
-//         <Text style={styles}>Post</Text>
-//       </Pressable>
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 8,
-//   },
-//   heading: {
-//     backgroundColor: '#7dd3fc',
-//     marginVertical: 15,
-//     textAlign: 'center',
-//     padding: 10,
-//     borderRadius: 10,
-//     overflow: 'hidden',
-//   },
-//   formContainer: {
-//     gap: 5,
-//   },
-//   label: {
-//     borderWidth: 1,
-//     borderColor: 'red',
-//   },
-//   inputField: {
-//     borderWidth: 1,
-//     borderColor: 'green',
-//   },
-//   button: {
-//     backgroundColor: 'blue',
-//     borderRadius: 5,
-//   },
-// });
