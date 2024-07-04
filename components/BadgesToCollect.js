@@ -1,11 +1,13 @@
 import { View, Text, Image, ScrollView } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getBadges, getMyBadges } from "../api";
 import { badgeStyles } from "../styles/badgeStyles";
+import { UserContext } from "../contexts/user-context";
 
 export default function BadgesToCollect() {
   const [badgesToCollect, setBadgesToCollect] = useState([]);
   const [myBadges, setMyBadges] = useState([]);
+  const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
     getBadges().then((badges) => {
@@ -14,7 +16,7 @@ export default function BadgesToCollect() {
   }, []);
 
   useEffect(() => {
-    getMyBadges(1).then((badges) => {
+    getMyBadges(user.vol_id).then((badges) => {
       setMyBadges(badges);
     });
   }, []);

@@ -10,7 +10,6 @@ export default function BadgeLeaderboard() {
 
     useEffect(() => {
         getBadgeLeaderboard().then((badges) => {
-            console.log(badges, 'leaderboard badges')
             setLeaderboard(badges)
         })
     }, [])
