@@ -41,12 +41,7 @@ export default function MyListingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Button
-        onPress={getFavListings}
-        title="press me"
-      />
-
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>My favourite opportunities</Text>
       <ScrollView
         style={styles.scrollView}
@@ -72,25 +67,32 @@ export default function MyListingsScreen() {
           );
         })}
       </ScrollView>
+      <Text style={styles.title}>My current applications</Text>
+      <ScrollView
+        style={styles.scrollView}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}>
+        {favListings.map((listing) => {
+          return (
+            <TouchableOpacity
+              style={styles.card}
+              key={listing.fav_lists_id}>
+              <Image
+                source={require('../assets/list-img1.png')}
+                style={styles.image}
+              />
 
-      <View style={styles}>
-        <Text style={styles}>My current applications</Text>
-        <ScrollView
-          style={styles}
-          horizontal={true}>
-          {favListings.map((listing) => {
-            return (
-              <View
-                style={{ borderWidth: 1, borderColor: 'red', width: 300 }}
-                key={listing.fav_lists_id}>
-                <Text style={styles}>{listing.list_title}</Text>
-                <Text style={styles}>{listing.list_description}</Text>
+              <View style={styles.cardContent}>
+                <Text style={styles.cardTitle}>{listing.list_title}</Text>
+                <Text style={styles.cardDescription}>
+                  {listing.list_description}
+                </Text>
               </View>
-            );
-          })}
-        </ScrollView>
-      </View>
-    </View>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    </ScrollView>
   );
 }
 
