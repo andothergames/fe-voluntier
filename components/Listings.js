@@ -1,10 +1,9 @@
 import { View, FlatList, Pressable } from "react-native";
-import { listingStyles } from "../styles/listingStyles";
+import { listingStyles as styles } from "../styles/listingStyles";
 import { useEffect, useState } from "react";
 import { getListings } from "../api";
 import ListingCard from "./ListingCard";
 import { useNavigation } from "@react-navigation/native";
-import SingleListing from "./SingleListing";
 
 export default function Listings() {
   const [listings, setListings] = useState([]);
@@ -27,7 +26,7 @@ export default function Listings() {
   };
 
   return (
-    <View style={listingStyles.container}>
+    <View style={styles.container}>
       <FlatList
         data={listings}
         renderItem={(item) => {
