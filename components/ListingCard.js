@@ -1,26 +1,29 @@
 import { View, Text, Image } from 'react-native';
-import { listingStyles } from '../styles/listingStyles';
+import { listingStyles as styles } from '../styles/listingStyles';
 
 export default function ListingCard({ listing }) {
   return (
-    <View style={listingStyles.card}>
+    <View style={styles.card}>
       <View>
         <Image
           source={require('../assets/listing-image.jpg')}
-          style={listingStyles.image}></Image>
+          style={styles.image}></Image>
       </View>
-      <View style={listingStyles.textContainer}>
-        <Text style={listingStyles.title}>
-          {listing.list_title} {listing.org_name}
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>
+          {listing.list_title}
         </Text>
-        <View style={listingStyles.smallTextContainer}>
-          <Text style={[listingStyles.description, listingStyles.left]}>
+        <Text style={styles.orgName}>
+          {listing.org_name}
+        </Text>
+        <View style={styles.smallTextContainer}>
+          <Text style={styles.date}>
             {listing.list_date} {listing.list_time}
           </Text>
         </View>
       </View>
-      <View style={listingStyles.hoursContainer}>
-        <Text style={listingStyles.hours}>{listing.list_duration}</Text>
+      <View style={styles.hoursContainer}>
+        <Text style={styles.hours}>{listing.list_duration}</Text><Text style={styles.hrs}>hrs</Text>
       </View>
     </View>
   );

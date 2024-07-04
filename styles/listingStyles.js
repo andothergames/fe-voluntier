@@ -4,12 +4,10 @@ export const listingStyles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#f8f8f8',
     width: '100%',
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 10,
     marginVertical: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -21,27 +19,31 @@ export const listingStyles = StyleSheet.create({
     overflow: 'hidden',
   },
   title: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
-    marginBottom: 5,
+    marginBottom: 4,
+  },
+  orgName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#7BB9F8',
+    marginBottom: 4,
   },
   image: {
     width: '100%',
     height: 250,
     borderRadius: 25,
   },
-  description: {
-    flex: 1,
-    fontSize: 14,
-    color: 'white',
-  },
   textContainer: {
     position: 'absolute',
     bottom: 0,
-    padding: 15,
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingTop: 8,
+    paddingBottom: 10,
     width: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
@@ -49,20 +51,29 @@ export const listingStyles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
-    backgroundColor: 'rgba( 0, 0, 0, 0.5)',
-    padding: 15,
+    backgroundColor: 'rgba( 123, 185, 248, 0.8)',
+    padding: 10,
     borderRadius: 50,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   hours: {
-    color: 'white',
+    color: 'black',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  hrs: {
+    color: 'black',
+    fontSize: 14,
   },
   smallTextContainer: {
     width: '100%',
     flexDirection: 'row',
   },
-  left: {
+  date: {
+    flex: 1,
+    fontSize: 14,
+    color: 'white',
     textAlign: 'right',
   },
 });
