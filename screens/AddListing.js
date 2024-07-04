@@ -13,6 +13,7 @@ import axios from 'axios';
 import { DropDown } from '../components/DropDownPicker';
 import { TextInputMask } from 'react-native-masked-text';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default function AddListing() {
   const [listingTitle, setListingTitle] = useState('');
@@ -27,6 +28,8 @@ export default function AddListing() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [mode, setMode] = useState('date');
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
   useEffect(() => {
     getSkillsOptions().then((data) => {
@@ -44,7 +47,23 @@ export default function AddListing() {
   const handleImageUpload = () => {};
 
   const handleSubmitListing = () => {
-    console.log(time, 'time here');
+    const listingData = {
+      list_title: listingTitle,
+      list_location: location,
+      list_date: date.toISOString().split('T')[0],
+      list_time: time.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+      list_duration: duration,
+      list_description: description,
+      list_latitude: latitude,
+      list_longitude: longitude,
+      list_skills: value,
+      list_visible: true,
+    };
+    console.log(listingData);
+    // Submit the listingData to your backend
   };
 
   const handleDateChange = (event, selectedDate) => {
@@ -60,7 +79,8 @@ export default function AddListing() {
   };
 
   const showMode = (currentMode) => {
-    setShowDatePicker(true);
+    setShowDatePicker(currentMode === 'date');
+    setShowTimePicker(currentMode === 'time');
     setMode(currentMode);
   };
 
@@ -86,12 +106,29 @@ export default function AddListing() {
         />
 
         <Text style={styles.label}>Location</Text>
-        <TextInput
+        <GooglePlacesAutocomplete
+          placeholder="Search"
+          onPress={(data, details = null) => {
+            setLocation(data.description);
+            setLatitude(details.geometry.location.lat);
+            setLongitude(details.geometry.location.lng);
+          }}
+          query={{
+            key: 'AIzaSyClTqhXEQu1PceR0w04nYWu2TkAbyiuAJs',
+            language: 'en',
+          }}
+          fetchDetails={true}
+          styles={{
+            textInput: styles.inputField,
+            container: { flex: 0 },
+          }}
+        />
+        {/* <TextInput
           style={styles.inputField}
           placeholder="Location"
           value={location}
           onChangeText={(input) => setLocation(input)}
-        />
+        /> */}
 
         <Text style={styles.label}>Date</Text>
 
