@@ -13,11 +13,12 @@ import {
 
 export default function MyListingsScreen() {
   const [favListings, setFavListings] = useState([]);
-  const [mySubmissions, setMySubmissions] = useState([]);
+  const [myApplications, setMyApplications] = useState([]);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
     getFavListings(userId);
+    getVolApplications(userId);
   }, []);
 
   const userId = 1;
@@ -26,7 +27,6 @@ export default function MyListingsScreen() {
   const getFavListings = (userId) => {
     userId = 1;
     // user.vol_id;
-    console.log(userId, 'userId here');
     axios
       .get(
         `https://voluntier-api.codermatt.com/api/favourites/${userId}/listings`
@@ -34,6 +34,19 @@ export default function MyListingsScreen() {
       .then((data) =>
         // console.log(data.data.favourite_listings, 'data from favlistings')
         setFavListings(data.data.favourite_listings)
+      )
+      .catch((err) =>
+        console.log('error fetching your favourite listings:', err)
+      );
+  };
+  const getVolApplications = (userId) => {
+    userId = 1;
+    // user.vol_id;
+    axios
+      .get(`https://voluntier-api.codermatt.com/api/applications/vol/${userId}`)
+      .then((data) =>
+        // console.log(data.data.applications, 'data from applications')
+        setMyApplications(data.data.applications)
       )
       .catch((err) =>
         console.log('error fetching your favourite listings:', err)
@@ -72,20 +85,22 @@ export default function MyListingsScreen() {
         style={styles.scrollView}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
-        {favListings.map((listing) => {
+        {myApplications.map((application) => {
+          console.log(application, 'here data');
           return (
             <TouchableOpacity
               style={styles.card}
-              key={listing.fav_lists_id}>
+              key={application.listing_id}>
               <Image
                 source={require('../assets/list-img1.png')}
                 style={styles.image}
               />
 
               <View style={styles.cardContent}>
-                <Text style={styles.cardTitle}>{listing.list_title}</Text>
+                <Text style={styles.cardTitle}>{application.list_title}</Text>
+                <Text style={styles.cardTitle}>{application.org_name}</Text>
                 <Text style={styles.cardDescription}>
-                  {listing.list_description}
+                  {application.list_description}
                 </Text>
               </View>
             </TouchableOpacity>
