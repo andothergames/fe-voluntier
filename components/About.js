@@ -1,13 +1,16 @@
 import React from "react";
-import { View, Text, Image, ScrollView } from "react-native";
-import { styles } from "../styles/appStyles";
+import { View, Text, Image, ScrollView, Dimensions } from "react-native";
+import { drawerStyles as styles } from "../styles/drawerStyles";
 
 export default function About() {
+
+  const screenWidth = Dimensions.get("window").width;
+  const imageWidth = screenWidth * 0.9;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.aboutHeader}>About Us</Text>
-      <Image source={require("../assets/listing-image.jpg")} style={styles.image} />
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <Image source={require("../assets/listing-image.jpg")} style={[styles.image, { width: imageWidth }]} />
         <Text style={styles.text}>
           Voluntier is a platform that connects volunteers with organisations that
           need help. We believe that everyone has something to offer, and that by

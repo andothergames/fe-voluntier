@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import DrawerNavigator from "./Settings-Dropdown";
+import DrawerNavigator from "./SettingsDropdown";
 import SingleListing from "./SingleListing";
 import Login from "./Login";
 

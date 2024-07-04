@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
   },
   navigationContainer: {
     flex: 1,
-    // marginTop: 100,
     width: '100%',
   },
   text: {
@@ -24,15 +23,5 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-  },
-  deleteButton: {
-    backgroundColor: 'red',
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 20,
-    marginLeft: 20,
-    padding: 10,
   },
 });

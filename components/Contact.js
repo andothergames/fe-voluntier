@@ -4,7 +4,7 @@ import {
   View,
   Text,
   TextInput,
-  Button,
+  Pressable,
   Alert,
   ScrollView,
 } from "react-native";
@@ -77,7 +77,7 @@ export default function Contact() {
           />
           <Text style={styles.inputLabel}>{message.length}/500</Text>
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
-          <Button title="Submit" onPress={handleSubmit} />
+          <Pressable onPress={handleSubmit} style={styles.button}><Text style={styles.white}>Submit</Text></Pressable>
         </View>
       </View>
     </ScrollView>
