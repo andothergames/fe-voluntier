@@ -68,7 +68,7 @@ const TabNavigator = () => {
           headerShown: false,
         }}
       />
-      {user && user.role === 'volunteer' && (
+      {user && user.role === "volunteer" && (
         <Tab.Screen
           name="TabMyListings"
           component={MyListingsScreen}
@@ -77,7 +77,7 @@ const TabNavigator = () => {
           }}
         />
       )}
-      {user && user.role === 'organisation' && (
+      {user && user.role === "organisation" && (
         <Tab.Screen
           name="TabAddListing"
           component={AddListingScreen}
@@ -100,10 +100,7 @@ const TabNavigator = () => {
 const StackNavigator = ({ isVisible }) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
-        options={{ headerShown: false }}
-      >
+      <Stack.Screen name="Home" options={{ headerShown: false }}>
         {() => (
           <>
             {isVisible && <TabNavigator />}

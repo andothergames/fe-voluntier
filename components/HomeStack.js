@@ -3,16 +3,14 @@ import DrawerNavigator from "./Settings-Dropdown";
 import SingleListing from "./SingleListing";
 import Login from "./Login";
 
-
 const Stack = createStackNavigator();
-
 
 export default function HomeStack() {
   return (
     <Stack.Navigator initialRouteName="DrawerNavigator">
       <Stack.Screen
         name="DrawerNavigator"
-        component={DrawerNavigator} 
+        component={DrawerNavigator}
         options={{
           headerShown: false,
         }}
@@ -21,7 +19,7 @@ export default function HomeStack() {
         name="SingleListing"
         component={SingleListing}
         options={{
-          headerTitle: '',
+          headerTitle: "",
           headerBackTitleVisible: false,
         }}
       />
