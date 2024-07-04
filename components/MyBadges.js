@@ -1,13 +1,16 @@
 import { View, Text, Image, ScrollView } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getMyBadges } from "../api";
 import { badgeStyles } from "../styles/badgeStyles";
+import { UserContext } from "../contexts/user-context";
 
 export default function MyBadges() {
   const [myBadges, setMyBadges] = useState([]);
+  const { user, setUser } = useContext(UserContext);
+
 
   useEffect(() => {
-    getMyBadges(1).then((badges) => {
+    getMyBadges(user.vol_id).then((badges) => {
       setMyBadges(badges);
     });
   }, []);
