@@ -70,9 +70,10 @@ export default function AddListing() {
           base64: true,
         }
       );
+      console.log(manipResult.base64, 'here massive str');
       setImage({
         uri: manipResult.uri,
-        base64: 'massive string',
+        base64: `data:image/jpeg;base64,${manipResult.base64}`,
       });
     }
   };
@@ -103,7 +104,7 @@ export default function AddListing() {
       list_description: description,
       list_latitude: latitude,
       list_longitude: longitude,
-      // img_b64_data: image.base64,
+      img_b64_data: image.base64,
       list_skills: value,
       list_visible: true,
     };
@@ -246,7 +247,7 @@ export default function AddListing() {
           onChangeText={(input) => setDescription(input)}
         />
 
-        {/* {image.uri ? (
+        {image.uri ? (
           <Image
             source={{ uri: image.uri }}
             style={{ width: 200, height: 200 }}
@@ -257,7 +258,7 @@ export default function AddListing() {
           onPress={handleImageUpload}
           style={styles.uploadButton}>
           <Text style={styles.buttonText}>Upload Image</Text>
-        </Pressable> */}
+        </Pressable>
 
         <Text style={styles.label}>Skills required</Text>
         <DropDown
