@@ -1,0 +1,1 @@
+<FontAwesomeIcon icon="fa-solid fa-heart" style={{color: "#ff0505",}} />
