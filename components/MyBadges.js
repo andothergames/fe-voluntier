@@ -8,9 +8,8 @@ export default function MyBadges() {
   const [myBadges, setMyBadges] = useState([]);
   const { user, setUser } = useContext(UserContext);
 
-
   useEffect(() => {
-    getMyBadges(user.vol_id).then((badges) => {
+    getMyBadges(user.vol_id, user.token).then((badges) => {
       setMyBadges(badges);
     });
   }, []);

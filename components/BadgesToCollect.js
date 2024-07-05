@@ -16,7 +16,7 @@ export default function BadgesToCollect() {
   }, []);
 
   useEffect(() => {
-    getMyBadges(user.vol_id).then((badges) => {
+    getMyBadges(user.vol_id, user.token).then((badges) => {
       setMyBadges(badges);
     });
   }, []);

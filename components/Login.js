@@ -58,10 +58,8 @@ export default function Login() {
   };
 
   const handleSubmitLogout = () => {
-    logout().then(() => {
-      setMessage(`You have logged out`);
-      setUser(null);
-    });
+    setUser(null);
+    setMessage(`You have logged out`);
   };
 
   return (
