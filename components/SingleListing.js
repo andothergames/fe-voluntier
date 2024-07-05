@@ -3,6 +3,22 @@ import { singleListingStyles as styles } from "../styles/singleListingStyles";
 
 export default function SingleListing({ route }) {
   const { listing } = route.params;
+const date = new Date(listing.list_date);
+const time = new Date(`1970-01-01T${listing.list_time}`);
+
+const formattedDate = date.toLocaleString("en-GB", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+});
+
+const formattedTime = time.toLocaleTimeString("en-GB", {
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: true,
+});
+
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.card}>
@@ -10,7 +26,7 @@ export default function SingleListing({ route }) {
         <Text style={styles.orgName}>{listing.org_name}</Text>
         <Text style={styles.text}>Duration: {listing.list_duration} hours</Text>
         <Text style={styles.text}>
-          {listing.list_date} {listing.list_time}
+          {formattedDate} {formattedTime}
         </Text>
         <View>
           <Image
