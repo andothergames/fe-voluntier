@@ -246,7 +246,7 @@ export default function AddListing() {
           onChangeText={(input) => setDescription(input)}
         />
 
-        {image.uri ? (
+        {/* {image.uri ? (
           <Image
             source={{ uri: image.uri }}
             style={{ width: 200, height: 200 }}
@@ -257,7 +257,7 @@ export default function AddListing() {
           onPress={handleImageUpload}
           style={styles.uploadButton}>
           <Text style={styles.buttonText}>Upload Image</Text>
-        </Pressable>
+        </Pressable> */}
 
         <Text style={styles.label}>Skills required</Text>
         <DropDown
