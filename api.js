@@ -47,6 +47,16 @@ export const getMyBadges = (volId, token) => {
     });
 };
 
+export const postFavourite = (list_id, vol_id, token) => {
+  return voluntierApi
+    .post(`favourites/${vol_id}/listings`,{ list_id }, getAuthHeader(token) )
+    .then(({ data }) => {
+      return data;
+    }).catch((error) => {
+      console.error(error);
+    })
+};
+
 export const getBadgeLeaderboard = () => {
   return voluntierApi.get("leaderboard").then(({ data }) => {
     return data.leaderboard;

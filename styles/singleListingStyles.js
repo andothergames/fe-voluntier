@@ -49,4 +49,10 @@ export const singleListingStyles = StyleSheet.create({
     paddingBottom: 10,
     fontWeight: "bold",
   },
+  favourite: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 10, 
+  },
 });
