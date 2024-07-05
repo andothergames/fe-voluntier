@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../contexts/user-context';
-import axios from 'axios';
+import { useState, useEffect, useContext } from "react";
+import { UserContext } from "../contexts/user-context";
+import axios from "axios";
 import {
   ScrollView,
   View,
@@ -9,7 +9,9 @@ import {
   Text,
   Image,
   TouchableOpacity,
-} from 'react-native';
+} from "react-native";
+
+import { getAuthHeader } from "../api";
 
 export default function MyListingsScreen() {
   const [favListings, setFavListings] = useState([]);
@@ -29,27 +31,31 @@ export default function MyListingsScreen() {
     // user.vol_id;
     axios
       .get(
-        `https://voluntier-api.codermatt.com/api/favourites/${userId}/listings`
+        `https://voluntier-api.codermatt.com/api/favourites/${userId}/listings`,
+        getAuthHeader(user.token)
       )
       .then((data) =>
         // console.log(data.data.favourite_listings, 'data from favlistings')
         setFavListings(data.data.favourite_listings)
       )
       .catch((err) =>
-        console.log('error fetching your favourite listings:', err)
+        console.log("error fetching your favourite listings:", err)
       );
   };
   const getVolApplications = (userId) => {
     userId = 1;
     // user.vol_id;
     axios
-      .get(`https://voluntier-api.codermatt.com/api/applications/vol/${userId}`)
+      .get(
+        `https://voluntier-api.codermatt.com/api/applications/vol/${userId}`,
+        getAuthHeader(user.token)
+      )
       .then((data) =>
         // console.log(data.data.applications, 'data from applications')
         setMyApplications(data.data.applications)
       )
       .catch((err) =>
-        console.log('error fetching your favourite listings:', err)
+        console.log("error fetching your favourite listings:", err)
       );
   };
 
@@ -59,14 +65,13 @@ export default function MyListingsScreen() {
       <ScrollView
         style={styles.scrollView}
         horizontal={true}
-        showsHorizontalScrollIndicator={false}>
+        showsHorizontalScrollIndicator={false}
+      >
         {favListings.map((listing) => {
           return (
-            <TouchableOpacity
-              style={styles.card}
-              key={listing.fav_lists_id}>
+            <TouchableOpacity style={styles.card} key={listing.fav_lists_id}>
               <Image
-                source={require('../assets/list-img1.png')}
+                source={require("../assets/list-img1.png")}
                 style={styles.image}
               />
 
@@ -84,15 +89,14 @@ export default function MyListingsScreen() {
       <ScrollView
         style={styles.scrollView}
         horizontal={true}
-        showsHorizontalScrollIndicator={false}>
+        showsHorizontalScrollIndicator={false}
+      >
         {myApplications.map((application) => {
-          console.log(application, 'here data');
+          console.log(application, "here data");
           return (
-            <TouchableOpacity
-              style={styles.card}
-              key={application.listing_id}>
+            <TouchableOpacity style={styles.card} key={application.listing_id}>
               <Image
-                source={require('../assets/list-img1.png')}
+                source={require("../assets/list-img1.png")}
                 style={styles.image}
               />
 
@@ -115,21 +119,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginVertical: 10,
   },
   scrollView: {
     paddingVertical: 10,
   },
   card: {
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderRadius: 10,
     marginHorizontal: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
     width: 250,
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 150,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -147,11 +151,11 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   cardDescription: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
 });
