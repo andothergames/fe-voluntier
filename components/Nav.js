@@ -4,9 +4,14 @@ import { useState, useEffect, useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BadgesScreen from "../screens/BadgesScreen";
+import OrgBadgesScreen from "../screens/OrgBadgesScreen";
 import MyListingsScreen from "../screens/MyListingsScreen";
 import AddListingScreen from "../screens/AddListing";
 import HomeStack from "./HomeStack";
+import HomeScreen from "../screens/HomeScreen";
+import OrgHomeScreen from "../screens/OrgHomeScreen";
+import SingleListing from "./SingleListing";
+import Login from "./Login";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -28,11 +33,19 @@ const TabNavigator = () => {
 
           if (route.name === "TabHome") {
             icon = homeIcon;
+          } else if (route.name === "TabVolHome") {
+            icon = homeIcon;
+          } else if (route.name === "TabOrgHome") {
+            icon = homeIcon;
           } else if (route.name === "TabMyListings") {
             icon = myListingsIcon;
           } else if (route.name === "TabAddListing") {
             icon = addListingIcon;
           } else if (route.name === "TabBadges") {
+            icon = badgeIcon;
+          } else if (route.name === "TabOrgBadges") {
+            icon = badgeIcon;
+          } else if (route.name === "TabVolBadges") {
             icon = badgeIcon;
           }
 
@@ -49,11 +62,19 @@ const TabNavigator = () => {
 
           if (route.name === "TabHome") {
             label = "Home";
+          } else if (route.name === "TabVolHome") {
+            label = "Home";
+          } else if (route.name === "TabOrgHome") {
+            label = "Home";
           } else if (route.name === "TabMyListings") {
             label = "My Listings";
           } else if (route.name === "TabAddListing") {
             label = "Add Listing";
           } else if (route.name === "TabBadges") {
+            label = "Badges";
+          } else if (route.name === "TabVolBadges") {
+            label = "Badges";
+          } else if (route.name === "TabOrgBadges") {
             label = "Badges";
           }
 
@@ -61,13 +82,34 @@ const TabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen
-        name="TabHome"
-        component={HomeStack}
-        options={{
-          headerShown: false,
-        }}
-      />
+      {!user && (
+        <Tab.Screen
+          name="TabHome"
+          component={HomeStack}
+          options={{
+            headerShown: false,
+          }}
+        />
+      )}
+      {user && user.role === "volunteer" && (
+        <Tab.Screen
+          name="TabVolHome"
+          component={HomeScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      )}
+      {user && user.role === "organisation" && (
+        <Tab.Screen
+          name="TabOrgHome"
+          component={OrgHomeScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      )}
+
       {user && user.role === "volunteer" && (
         <Tab.Screen
           name="TabMyListings"
@@ -86,13 +128,24 @@ const TabNavigator = () => {
           }}
         />
       )}
-      <Tab.Screen
-        name="TabBadges"
-        component={BadgesScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+      {user && user.role === "organisation" && (
+        <Tab.Screen
+          name="TabOrgBadges"
+          component={OrgBadgesScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      )}
+      {user && user.role === "volunteer" && (
+        <Tab.Screen
+          name="TabVolBadges"
+          component={BadgesScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      )}
     </Tab.Navigator>
   );
 };
@@ -108,6 +161,22 @@ const StackNavigator = ({ isVisible }) => {
           </>
         )}
       </Stack.Screen>
+      <Stack.Screen
+        name="SingleListing"
+        component={SingleListing}
+        options={{
+          headerTitle: "",
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerTitle: null,
+          headerBackTitleVisible: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -117,7 +186,7 @@ export default function Nav() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(!!user); // Convert user to boolean (true if user exists, false otherwise)
+    setIsVisible(!!user);
   }, [user]);
 
   return <StackNavigator isVisible={isVisible} />;
