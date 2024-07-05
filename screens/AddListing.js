@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,12 +8,17 @@ import {
   FlatList,
   Button,
   SafeAreaView,
+  Image,
 } from 'react-native';
 import axios from 'axios';
 import { DropDown } from '../components/DropDownPicker';
 import { TextInputMask } from 'react-native-masked-text';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
+import { getAuthHeader } from '../api';
+import { UserContext } from '../contexts/user-context';
 
 export default function AddListing() {
   const [listingTitle, setListingTitle] = useState('');
@@ -30,6 +35,8 @@ export default function AddListing() {
   const [mode, setMode] = useState('date');
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [image, setImage] = useState({ uri: '', base64: '' });
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     getSkillsOptions().then((data) => {
@@ -44,9 +51,47 @@ export default function AddListing() {
     return axios.get(`https://voluntier-api.codermatt.com/api/skills`);
   };
 
-  const handleImageUpload = () => {};
+  const handleImageUpload = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.1,
+      base64: false,
+    });
+    if (!result.canceled) {
+      // console.log(result.assets[0], 'result');
+      const manipResult = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width: 600 } }],
+        {
+          compress: 0.5,
+          format: ImageManipulator.SaveFormat.JPEG,
+          base64: true,
+        }
+      );
+      console.log(manipResult.base64, 'here massive str');
+      setImage({
+        uri: manipResult.uri,
+        base64: `data:image/jpeg;base64,${manipResult.base64}`,
+      });
+    }
+  };
 
   const handleSubmitListing = () => {
+    if (
+      !listingTitle ||
+      !location ||
+      !date ||
+      !time ||
+      !duration ||
+      !description ||
+      !latitude ||
+      !longitude
+    ) {
+      alert('Please fill out all required fields.');
+      return;
+    }
     const listingData = {
       list_title: listingTitle,
       list_location: location,
@@ -59,11 +104,22 @@ export default function AddListing() {
       list_description: description,
       list_latitude: latitude,
       list_longitude: longitude,
+      img_b64_data: image.base64,
       list_skills: value,
       list_visible: true,
     };
-    console.log(listingData);
+
     // Submit the listingData to your backend
+
+    axios
+      .post(
+        `https://voluntier-api.codermatt.com/api/listings`,
+        listingData,
+
+        getAuthHeader(user.token)
+      )
+      .then((data) => console.log(data, 'here posted data'))
+      .catch((err) => console.log('error:', err));
   };
 
   const handleDateChange = (event, selectedDate) => {
@@ -123,12 +179,6 @@ export default function AddListing() {
             container: { flex: 0 },
           }}
         />
-        {/* <TextInput
-          style={styles.inputField}
-          placeholder="Location"
-          value={location}
-          onChangeText={(input) => setLocation(input)}
-        /> */}
 
         <Text style={styles.label}>Date</Text>
 
@@ -196,6 +246,13 @@ export default function AddListing() {
           value={description}
           onChangeText={(input) => setDescription(input)}
         />
+
+        {image.uri ? (
+          <Image
+            source={{ uri: image.uri }}
+            style={{ width: 200, height: 200 }}
+          />
+        ) : null}
 
         <Pressable
           onPress={handleImageUpload}

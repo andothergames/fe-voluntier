@@ -16,12 +16,6 @@ export const getAuthHeader = (token) => {
   };
 };
 
-export const getListings = () => {
-  return voluntierApi.get("listings").then(({ data }) => {
-    return data.listings;
-  });
-};
-
 export const login = (body) => {
   return voluntierApi
     .post("login", body)
@@ -31,6 +25,18 @@ export const login = (body) => {
     .catch((error) => {
       return error;
     });
+};
+
+export const getListings = () => {
+  return voluntierApi.get("listings").then(({ data }) => {
+    return data.listings;
+  });
+};
+
+export const getOrgListings = (orgId, token) => {
+  return voluntierApi.get(`listings?org_id=${orgId}`, getAuthHeader(token)).then(({ data }) => {
+    return data.listings;
+  });
 };
 
 export const getBadges = () => {
