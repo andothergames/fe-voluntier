@@ -35,7 +35,7 @@ export default function BadgesToCollect() {
           {filteredBadgesToCollect.map((badge) => (
             <View key={badge.badge_id} style={badgeStyles.badgeItem}>
               <Image
-                source={require("../assets/example-badge.png")}
+                source={require("../assets/badges/badge0.png")}
                 style={badgeStyles.badgeIcon}
               ></Image>
               <View style={badgeStyles.badgeTextContainer}>
