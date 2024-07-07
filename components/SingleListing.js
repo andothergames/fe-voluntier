@@ -6,6 +6,7 @@ import { postFavourite } from "../api";
 import { UserContext } from "../contexts/user-context";
 import { useContext, useEffect } from "react";
 import { useState } from "react";
+import { StyleSheet } from "react-native";
 import * as api from "../api";
 
 export default function SingleListing({ route }) {
@@ -16,9 +17,10 @@ export default function SingleListing({ route }) {
   const [isFavourite, setIsFavourite] = useState(false);
 
   const [listImg, setListImg] = useState(null);
+  const [skills, setSkills] = useState(null);
 
   useEffect(() => {
-    const { list_img_id } = listing;
+    const { list_img_id, list_id } = listing;
 
     if (list_img_id) {
       api
@@ -29,6 +31,21 @@ export default function SingleListing({ route }) {
         .catch((err) => {
           console.log("ERROR: Cannot get image data!");
         });
+    }
+
+    if (!skills) {
+      api
+        .getSkillsForListId(list_id)
+        .then((skills) => {
+          console.log("Successfully skills!");
+
+          const skillMap = skills.map((skill) => {
+            return skill.skill_name;
+          });
+
+          setSkills(skillMap);
+        })
+        .catch((err) => {});
     }
   }, [listing]);
 
@@ -70,12 +87,17 @@ export default function SingleListing({ route }) {
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.text}>Duration: {listing.list_duration} hours</Text>
-        <Text style={styles.text}>
+        <Text style={[styles.text, listingStyles.bold]}>
+          Duration:{" "}
+          <Text style={listingStyles.normal}>
+            {listing.list_duration} hours
+          </Text>
+        </Text>
+        <Text style={[styles.text, listingStyles.bold, listingStyles.grey]}>
           {formattedDate} {formattedTime}
         </Text>
 
-        <View>
+        <View style={listingStyles.imageContainer}>
           {listImg ? (
             <Image source={{ uri: listImg }} style={styles.image} />
           ) : (
@@ -87,7 +109,58 @@ export default function SingleListing({ route }) {
         </View>
         <Text style={styles.titleText}>What you'll be doing:</Text>
         <Text style={styles.text}>{listing.list_description}</Text>
+        <View>
+          {skills ? (
+            <>
+              <Text style={styles.titleText}>Skills:</Text>
+              <View style={listingStyles.skillsContainer}>
+                {skills.map((skill) => {
+                  return <Text style={listingStyles.skill}>{skill}</Text>;
+                })}
+              </View>
+            </>
+          ) : null}
+        </View>
       </View>
     </ScrollView>
   );
 }
+
+const listingStyles = StyleSheet.create({
+  bold: {
+    fontWeight: "bold",
+  },
+
+  grey: {
+    color: "#383838",
+  },
+
+  normal: {
+    fontWeight: "normal",
+  },
+
+  skillsContainer: {
+    margin: 1,
+    marginTop: 3,
+    marginBottom: 3,
+    flex: 1,
+    flexDirection: "row",
+    gap: 10,
+  },
+
+  imageContainer: {
+    marginTop: 5,
+    marginBottom: 5,
+  },
+
+  skill: {
+    borderRadius: 10,
+    backgroundColor: "lightgrey",
+    padding: 11,
+    paddingLeft: 15,
+    paddingRight: 15,
+    textAlign: "center",
+    overflow: "hidden",
+    display: "inline",
+  },
+});
