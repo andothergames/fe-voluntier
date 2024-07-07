@@ -84,6 +84,12 @@ export const getSkillsOptions = () => {
   });
 };
 
+export const getSkillsForListId = (listId) => {
+  return voluntierApi.get(`/skills/${listId}`).then(({ data }) => {
+    return data.skills;
+  });
+};
+
 const imgCache = new Map();
 export const getB64Image = (imgId) => {
   if (imgCache.has(imgId)) {

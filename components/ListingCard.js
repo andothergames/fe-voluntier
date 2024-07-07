@@ -5,9 +5,12 @@ import { useEffect, useState } from "react";
 
 export default function ListingCard({ listing }) {
   const [img, setImg] = useState(null);
+  const [skills, setSkills] = useState(null);
 
   useEffect(() => {
     const { list_img_id } = listing;
+
+    console.log(listing);
 
     // Get image if not null
     if (list_img_id) {
@@ -19,6 +22,11 @@ export default function ListingCard({ listing }) {
         .catch((err) => {
           console.log("ERROR: Cannot fetch image!");
         });
+    }
+
+    // Get skills
+    if (!skills) {
+      // api.getSkillsForListId(listing.list_id)
     }
   }, [listing]);
 
