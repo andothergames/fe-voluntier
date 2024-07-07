@@ -71,3 +71,29 @@ export const getBadgeLeaderboard = () => {
     return data.leaderboard;
   });
 };
+
+export const postListing = (listingData, token) => {
+  return voluntierApi.post("/listings").then(({ data }) => {
+    return data.listing;
+  });
+};
+
+export const getSkillsOptions = () => {
+  return voluntierApi.get("/skills").then(({ data }) => {
+    return data.skills;
+  });
+};
+
+const imgCache = new Map();
+export const getB64Image = (imgId) => {
+  if (imgCache.has(imgId)) {
+    return Promise.resolve(imgCache.get(imgId));
+  }
+
+  return voluntierApi.get(`images/${imgId}`).then(({ data }) => {
+    // Cache image
+    imgCache.set(imgId, data.image);
+
+    return data.image;
+  });
+};
