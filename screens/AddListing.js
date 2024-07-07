@@ -1,42 +1,43 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
   TextInput,
-  View,
   Pressable,
   FlatList,
   Button,
-  SafeAreaView,
   Image,
-} from 'react-native';
-import axios from 'axios';
-import { DropDown } from '../components/DropDownPicker';
-import { TextInputMask } from 'react-native-masked-text';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import * as ImagePicker from 'expo-image-picker';
-import * as ImageManipulator from 'expo-image-manipulator';
-import { getAuthHeader } from '../api';
-import { UserContext } from '../contexts/user-context';
+} from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import axios from "axios";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
+
+import { DropDown } from "../components/DropDownPicker";
+import { getAuthHeader } from "../api";
+import { UserContext } from "../contexts/user-context";
 
 export default function AddListing() {
-  const [listingTitle, setListingTitle] = useState('');
-  const [location, setLocation] = useState('');
+  const [listingTitle, setListingTitle] = useState("");
+  const [location, setLocation] = useState("");
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
-  const [duration, setDuration] = useState('');
-  const [description, setDescription] = useState('');
+  const [duration, setDuration] = useState(0);
+  const [description, setDescription] = useState("");
   const [skillsOption, setSkillsOption] = useState([]);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [mode, setMode] = useState('date');
+  const [mode, setMode] = useState("date");
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [image, setImage] = useState({ uri: '', base64: '' });
+  const [image, setImage] = useState({ uri: "", base64: "" });
   const { user } = useContext(UserContext);
+
+  const DEBUG = true;
 
   useEffect(() => {
     getSkillsOptions().then((data) => {
@@ -49,6 +50,65 @@ export default function AddListing() {
 
   const getSkillsOptions = () => {
     return axios.get(`https://voluntier-api.codermatt.com/api/skills`);
+  };
+
+  const handleSubmitListing = () => {
+    if (DEBUG) {
+      console.log("In handleSubmitListing()");
+    }
+
+    if (
+      !listingTitle ||
+      !location ||
+      !date ||
+      !time ||
+      !duration ||
+      !description ||
+      !latitude ||
+      !longitude
+    ) {
+      alert("Please fill out all required fields.");
+
+      return;
+    }
+
+    const listingData = {
+      list_title: listingTitle,
+      list_location: location,
+      list_date: date.toISOString().split("T")[0],
+      list_time: time.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      list_duration: duration,
+      list_description: description,
+      list_latitude: latitude,
+      list_longitude: longitude,
+      img_b64_data: image.base64,
+      list_skills: value && value.length ? value : null,
+    };
+
+    // Submit the listingData to your backend
+    axios
+      .post(
+        `https://voluntier-api.codermatt.com/api/listings`,
+        listingData,
+        getAuthHeader(user.token)
+      )
+      .then((response) => {
+        console.log("DONE!");
+
+        if (DEBUG) {
+          console.log("DATA: ", response.data);
+        }
+
+        alert("Listing successfully posted!");
+      })
+      .catch(({ response }) => {
+        if (DEBUG) {
+          console.log(response.data);
+        }
+      });
   };
 
   const handleImageUpload = async () => {
@@ -70,7 +130,11 @@ export default function AddListing() {
           base64: true,
         }
       );
-      console.log(manipResult.base64, 'here massive str');
+
+      if (DEBUG) {
+        console.log("compressed_img_size: ", manipResult.base64.length);
+      }
+
       setImage({
         uri: manipResult.uri,
         base64: `data:image/jpeg;base64,${manipResult.base64}`,
@@ -78,52 +142,47 @@ export default function AddListing() {
     }
   };
 
-  const handleSubmitListing = () => {
-    if (
-      !listingTitle ||
-      !location ||
-      !date ||
-      !time ||
-      !duration ||
-      !description ||
-      !latitude ||
-      !longitude
-    ) {
-      alert('Please fill out all required fields.');
+  const handleTitleInput = (input) => {
+    console.log("Handling title input!");
+
+    setListingTitle(input);
+  };
+
+  const handleLocationInput = (data, details) => {
+    if (DEBUG) {
+      console.log("Handling location input!");
+    }
+
+    if (!data) {
+      if (DEBUG) {
+        console.log("Unable to fetch location data!");
+      }
+
       return;
     }
-    const listingData = {
-      list_title: listingTitle,
-      list_location: location,
-      list_date: date.toISOString().split('T')[0],
-      list_time: time.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
-      list_duration: duration,
-      list_description: description,
-      list_latitude: latitude,
-      list_longitude: longitude,
-      img_b64_data: image.base64,
-      list_skills: value,
-      list_visible: true,
-    };
 
-    // Submit the listingData to your backend
+    if (
+      data.description &&
+      details.geometry &&
+      details.geometry.location &&
+      details.geometry.location.lat &&
+      details.geometry.location.lng
+    ) {
+      if (DEBUG) {
+        console.log("description: ", data.description);
+        console.log("lng:", details.geometry.location.lng);
+        console.log("lat:", details.geometry.location.lat);
+      }
 
-    axios
-      .post(
-        `https://voluntier-api.codermatt.com/api/listings`,
-        listingData,
-
-        getAuthHeader(user.token)
-      )
-      .then((data) => console.log(data, 'here posted data'))
-      .catch((err) => console.log('error:', err));
+      setLocation(data.description);
+      setLatitude(details.geometry.location.lat);
+      setLongitude(details.geometry.location.lng);
+    }
   };
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
+
     setShowDatePicker(false);
     setDate(currentDate);
   };
@@ -134,18 +193,33 @@ export default function AddListing() {
     setTime(currentTime);
   };
 
+  const handleDurationChange = (input) => {
+    console.log(input);
+
+    const pattern = /^\d*$/;
+    if (!pattern.test(input)) {
+      if (DEBUG) {
+        console.log("Duration pattern failed!");
+      }
+
+      return;
+    }
+
+    setDuration(Number(input));
+  };
+
   const showMode = (currentMode) => {
-    setShowDatePicker(currentMode === 'date');
-    setShowTimePicker(currentMode === 'time');
+    setShowDatePicker(currentMode === "date");
+    setShowTimePicker(currentMode === "time");
     setMode(currentMode);
   };
 
   const showDatepicker = () => {
-    showMode('date');
+    showMode("date");
   };
 
   const showTimepicker = () => {
-    showMode('time');
+    showMode("time");
   };
 
   const renderFormFields = () => {
@@ -158,34 +232,32 @@ export default function AddListing() {
           style={styles.inputField}
           placeholder="Listing Title"
           value={listingTitle}
-          onChangeText={(input) => setListingTitle(input)}
+          onChangeText={handleTitleInput}
         />
 
         <Text style={styles.label}>Location</Text>
-        <GooglePlacesAutocomplete
-          placeholder="Search"
-          onPress={(data, details = null) => {
-            setLocation(data.description);
-            setLatitude(details.geometry.location.lat);
-            setLongitude(details.geometry.location.lng);
-          }}
-          query={{
-            key: 'AIzaSyClTqhXEQu1PceR0w04nYWu2TkAbyiuAJs',
-            language: 'en',
-          }}
-          fetchDetails={true}
-          styles={{
-            textInput: styles.inputField,
-            container: { flex: 0 },
-          }}
-        />
+        <ScrollView keyboardShouldPersistTaps={"always"}>
+          <GooglePlacesAutocomplete
+            placeholder="Search"
+            keepResultsAfterBlur={true}
+            value={location}
+            onPress={handleLocationInput}
+            query={{
+              key: "AIzaSyClTqhXEQu1PceR0w04nYWu2TkAbyiuAJs",
+              language: "en",
+            }}
+            fetchDetails={true}
+            listViewDisplayed={false}
+            styles={{
+              textInput: styles.inputField,
+              container: { flex: 0 },
+            }}
+          />
+        </ScrollView>
 
         <Text style={styles.label}>Date</Text>
 
-        <Button
-          title="Open Date Picker"
-          onPress={showDatepicker}
-        />
+        <Button title="Open Date Picker" onPress={showDatepicker} />
 
         <TextInput
           style={styles.inputField}
@@ -215,8 +287,8 @@ export default function AddListing() {
           style={styles.inputField}
           placeholder="Select Time"
           value={time.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
+            hour: "2-digit",
+            minute: "2-digit",
           })}
           editable={false}
           pointerEvents="none"
@@ -236,7 +308,7 @@ export default function AddListing() {
           style={styles.inputField}
           placeholder="A number between 1 and 8"
           value={duration}
-          onChangeText={(input) => setDuration(input)}
+          onChangeText={handleDurationChange}
         />
 
         <Text style={styles.label}>Description</Text>
@@ -254,9 +326,7 @@ export default function AddListing() {
           />
         ) : null}
 
-        <Pressable
-          onPress={handleImageUpload}
-          style={styles.uploadButton}>
+        <Pressable onPress={handleImageUpload} style={styles.uploadButton}>
           <Text style={styles.buttonText}>Upload Image</Text>
         </Pressable>
 
@@ -273,9 +343,7 @@ export default function AddListing() {
           max={7}
         />
 
-        <Pressable
-          onPress={handleSubmitListing}
-          style={styles.submitButton}>
+        <Pressable onPress={handleSubmitListing} style={styles.submitButton}>
           <Text style={styles.buttonText}>Post</Text>
         </Pressable>
       </>
@@ -284,7 +352,7 @@ export default function AddListing() {
 
   return (
     <FlatList
-      data={[{ key: 'form' }]}
+      data={[{ key: "form" }]}
       renderItem={renderFormFields}
       keyExtractor={(item) => item.key}
       contentContainerStyle={styles.container}
@@ -295,46 +363,46 @@ export default function AddListing() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: "#f8f9fa",
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   heading: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#343a40',
+    fontWeight: "bold",
+    color: "#343a40",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   label: {
     fontSize: 16,
-    color: '#495057',
+    color: "#495057",
     marginBottom: 5,
   },
   inputField: {
     borderWidth: 1,
-    borderColor: '#ced4da',
+    borderColor: "#ced4da",
     borderRadius: 5,
     padding: 10,
     marginBottom: 15,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
   uploadButton: {
-    backgroundColor: '#6c757d',
+    backgroundColor: "#6c757d",
     borderRadius: 5,
     padding: 10,
     marginBottom: 15,
-    alignItems: 'center',
+    alignItems: "center",
   },
   submitButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: "#007bff",
     borderRadius: 5,
     padding: 15,
     marginTop: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
   },
 });
