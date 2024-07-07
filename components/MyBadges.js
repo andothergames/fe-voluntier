@@ -22,7 +22,7 @@ export default function MyBadges() {
           {myBadges.map((badge) => (
             <View key={badge.badge_id} style={badgeStyles.badgeItem}>
               <Image
-                source={require("../assets/example-badge.png")}
+                source={require("../assets/badges/badge1.png")}
                 style={badgeStyles.badgeIcon}
               ></Image>
               <View style={badgeStyles.badgeTextContainer}>
