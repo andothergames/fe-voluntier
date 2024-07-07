@@ -6,19 +6,17 @@ import { getOrgListings } from "../api";
 import ListingCard from "./ListingCard";
 import { useNavigation } from "@react-navigation/native";
 
-export default function OrgListings() {
+export default function OrgListings({ orgListings, setOrgListings }) {
   const { user } = useContext(UserContext);
-  const [listings, setListings] = useState([]);
   const [err, setErr] = useState("");
   const navigation = useNavigation();
 
   useEffect(() => {
-      getOrgListings(user.org_id, user.token)
+    getOrgListings(user.org_id, user.token)
       .then((listings) => {
-        setListings(listings);
+        setOrgListings(listings);
       })
       .catch((error) => {
-        console.log(error);
         setErr(error);
       });
   }, []);
@@ -30,7 +28,7 @@ export default function OrgListings() {
   return (
     <View style={styles.container}>
       <FlatList
-        data={listings}
+        data={orgListings}
         renderItem={(item) => {
           return (
             <Pressable

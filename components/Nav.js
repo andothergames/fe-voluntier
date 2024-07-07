@@ -23,6 +23,8 @@ const badgeIcon = require("../assets/badge-icon.png");
 const TabNavigator = () => {
   const { user } = useContext(UserContext);
 
+  const [orgListings, setOrgListings] = useState([]);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -103,11 +105,17 @@ const TabNavigator = () => {
       {user && user.role === "organisation" && (
         <Tab.Screen
           name="TabOrgHome"
-          component={OrgHomeScreen}
           options={{
             headerShown: false,
           }}
-        />
+        >
+          {(props) => (
+            <OrgHomeScreen
+              setOrgListings={setOrgListings}
+              orgListings={orgListings}
+            />
+          )}
+        </Tab.Screen>
       )}
 
       {user && user.role === "volunteer" && (
@@ -122,11 +130,17 @@ const TabNavigator = () => {
       {user && user.role === "organisation" && (
         <Tab.Screen
           name="TabAddListing"
-          component={AddListingScreen}
           options={{
             headerShown: false,
           }}
-        />
+        >
+          {(props) => (
+            <AddListingScreen
+              setOrgListings={setOrgListings}
+              orgListings={orgListings}
+            />
+          )}
+        </Tab.Screen>
       )}
       {user && user.role === "organisation" && (
         <Tab.Screen

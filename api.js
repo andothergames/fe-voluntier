@@ -34,9 +34,11 @@ export const getListings = () => {
 };
 
 export const getOrgListings = (orgId, token) => {
-  return voluntierApi.get(`listings?org_id=${orgId}`, getAuthHeader(token)).then(({ data }) => {
-    return data.listings;
-  });
+  return voluntierApi
+    .get(`listings?org_id=${orgId}`, getAuthHeader(token))
+    .then(({ data }) => {
+      return data.listings;
+    });
 };
 
 export const getBadges = () => {
@@ -55,12 +57,13 @@ export const getMyBadges = (volId, token) => {
 
 export const postFavourite = (list_id, vol_id, token) => {
   return voluntierApi
-    .post(`favourites/${vol_id}/listings`,{ list_id }, getAuthHeader(token) )
+    .post(`favourites/${vol_id}/listings`, { list_id }, getAuthHeader(token))
     .then(({ data }) => {
       return data;
-    }).catch((error) => {
-      console.error(error);
     })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 export const getBadgeLeaderboard = () => {
