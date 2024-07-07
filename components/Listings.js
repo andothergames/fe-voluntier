@@ -16,7 +16,6 @@ export default function Listings() {
         setListings(listings);
       })
       .catch((error) => {
-        console.log(error);
         setErr(error);
       });
   }, []);

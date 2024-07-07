@@ -20,7 +20,7 @@ import * as postListingValidator from "../validators/post-listing.validator";
 import { DropDown } from "../components/DropDownPicker";
 import { getAuthHeader } from "../api";
 import { UserContext } from "../contexts/user-context";
-import { getOrgListings } from "../api";
+import * as api from "../api";
 
 export default function AddListing({ setOrgListings, orgListings }) {
   const [listingTitle, setListingTitle] = useState("");
@@ -45,17 +45,13 @@ export default function AddListing({ setOrgListings, orgListings }) {
   const DEBUG = false;
 
   useEffect(() => {
-    getSkillsOptions().then((data) => {
-      const formattedSkills = data.data.skills.map((skill) => {
+    api.getSkillsOptions().then((skills) => {
+      const formattedSkills = skills.map((skill) => {
         return { label: skill, value: skill };
       });
       setSkillsOption(formattedSkills);
     });
   }, []);
-
-  const getSkillsOptions = () => {
-    return axios.get(`https://voluntier-api.codermatt.com/api/skills`);
-  };
 
   const handleSubmitListing = () => {
     if (DEBUG) {
@@ -135,18 +131,14 @@ export default function AddListing({ setOrgListings, orgListings }) {
       list_skills: value && value.length ? value : null,
     };
 
-    // Submit the listingData to your backend
-    axios
-      .post(
-        `https://voluntier-api.codermatt.com/api/listings`,
-        listingData,
-        getAuthHeader(user.token)
-      )
-      .then((response) => {
+    // Post to server
+    api
+      .postListing(listingData, user.token)
+      .then((listing) => {
         alert("Listing successfully posted!");
 
         // Fetch updated listings
-        return getOrgListings(user.org_id, user.token);
+        return api.getOrgListings(user.org_id, user.token);
       })
       .then((listings) => {
         setOrgListings(listings);
@@ -154,9 +146,7 @@ export default function AddListing({ setOrgListings, orgListings }) {
         navigation.navigate("TabOrgHome");
       })
       .catch(({ response }) => {
-        if (DEBUG) {
-          console.log("ERROR: ", response.data);
-        }
+        console.log("ERROR: ", response.data);
       });
   };
 
@@ -169,7 +159,6 @@ export default function AddListing({ setOrgListings, orgListings }) {
       base64: false,
     });
     if (!result.canceled) {
-      // console.log(result.assets[0], 'result');
       const manipResult = await ImageManipulator.manipulateAsync(
         result.assets[0].uri,
         [{ resize: { width: 600 } }],

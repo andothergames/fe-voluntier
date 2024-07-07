@@ -4,8 +4,9 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { singleListingStyles as styles } from "../styles/singleListingStyles";
 import { postFavourite } from "../api";
 import { UserContext } from "../contexts/user-context";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
+import * as api from "../api";
 
 export default function SingleListing({ route }) {
   const { listing } = route.params;
@@ -13,6 +14,23 @@ export default function SingleListing({ route }) {
   const time = new Date(`1970-01-01T${listing.list_time}`);
   const { user } = useContext(UserContext);
   const [isFavourite, setIsFavourite] = useState(false);
+
+  const [listImg, setListImg] = useState(null);
+
+  useEffect(() => {
+    const { list_img_id } = listing;
+
+    if (list_img_id) {
+      api
+        .getB64Image(list_img_id)
+        .then(({ img_b64_data }) => {
+          setListImg(img_b64_data);
+        })
+        .catch((err) => {
+          console.log("ERROR: Cannot get image data!");
+        });
+    }
+  }, [listing]);
 
   const formattedDate = date.toLocaleString("en-GB", {
     day: "2-digit",
@@ -43,7 +61,7 @@ export default function SingleListing({ route }) {
             justifyContent: "space-between",
           }}
         ></View>
-         <View style={styles.favourite}>
+        <View style={styles.favourite}>
           <TouchableOpacity onPress={handleFavouritePress}>
             <FontAwesomeIcon
               icon={faHeart}
@@ -58,12 +76,14 @@ export default function SingleListing({ route }) {
         </Text>
 
         <View>
-          <Image
-            source={require("../assets/listing-image.jpg")}
-            style={styles.image}
-          >
-            {listing.list_img}
-          </Image>
+          {listImg ? (
+            <Image source={{ uri: listImg }} style={styles.image} />
+          ) : (
+            <Image
+              source={require("../assets/listing-image.jpg")}
+              style={styles.image}
+            />
+          )}
         </View>
         <Text style={styles.titleText}>What you'll be doing:</Text>
         <Text style={styles.text}>{listing.list_description}</Text>
