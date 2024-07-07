@@ -14,12 +14,15 @@ import axios from "axios";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
+import { useNavigation } from "@react-navigation/native";
 
+import * as postListingValidator from "../validators/post-listing.validator";
 import { DropDown } from "../components/DropDownPicker";
 import { getAuthHeader } from "../api";
 import { UserContext } from "../contexts/user-context";
+import { getOrgListings } from "../api";
 
-export default function AddListing() {
+export default function AddListing({ setOrgListings, orgListings }) {
   const [listingTitle, setListingTitle] = useState("");
   const [location, setLocation] = useState("");
   const [date, setDate] = useState(new Date());
@@ -37,7 +40,9 @@ export default function AddListing() {
   const [image, setImage] = useState({ uri: "", base64: "" });
   const { user } = useContext(UserContext);
 
-  const DEBUG = true;
+  const navigation = useNavigation();
+
+  const DEBUG = false;
 
   useEffect(() => {
     getSkillsOptions().then((data) => {
@@ -57,19 +62,61 @@ export default function AddListing() {
       console.log("In handleSubmitListing()");
     }
 
-    if (
-      !listingTitle ||
-      !location ||
-      !date ||
-      !time ||
-      !duration ||
-      !description ||
-      !latitude ||
-      !longitude
-    ) {
-      alert("Please fill out all required fields.");
+    const titleValObj = postListingValidator.validateTitle(listingTitle);
+    if (!titleValObj.valid) {
+      alert(titleValObj.msg);
 
       return;
+    }
+
+    const locValObj = postListingValidator.validateLocation(
+      location,
+      longitude,
+      latitude
+    );
+    if (!locValObj.valid) {
+      alert(locValObj.msg);
+
+      return;
+    }
+
+    const dateValObj = postListingValidator.validateDate(date);
+    if (!dateValObj.valid) {
+      alert(dateValObj.msg);
+
+      return;
+    }
+
+    const timeValObj = postListingValidator.validateTime(time);
+    if (!timeValObj.valid) {
+      alert(timeValObj.msg);
+
+      return;
+    }
+
+    const durationValObj = postListingValidator.validateDuration(duration);
+    if (!durationValObj.valid) {
+      alert(durationValObj.msg);
+
+      return;
+    }
+
+    const descValObj = postListingValidator.validateDescription(description);
+    if (!descValObj.valid) {
+      alert(descValObj.msg);
+
+      return;
+    }
+
+    if (image.base64) {
+      postListingValidator.validateImage(image.base64);
+    } else {
+      image.base64 = null;
+    }
+
+    // Validation complete!
+    if (DEBUG) {
+      console.log("Validation complete!");
     }
 
     const listingData = {
@@ -84,7 +131,7 @@ export default function AddListing() {
       list_description: description,
       list_latitude: latitude,
       list_longitude: longitude,
-      img_b64_data: image.base64,
+      img_b64_data: image.base64 ? image.base64 : null,
       list_skills: value && value.length ? value : null,
     };
 
@@ -96,17 +143,19 @@ export default function AddListing() {
         getAuthHeader(user.token)
       )
       .then((response) => {
-        console.log("DONE!");
-
-        if (DEBUG) {
-          console.log("DATA: ", response.data);
-        }
-
         alert("Listing successfully posted!");
+
+        // Fetch updated listings
+        return getOrgListings(user.org_id, user.token);
+      })
+      .then((listings) => {
+        setOrgListings(listings);
+
+        navigation.navigate("TabOrgHome");
       })
       .catch(({ response }) => {
         if (DEBUG) {
-          console.log(response.data);
+          console.log("ERROR: ", response.data);
         }
       });
   };
@@ -143,8 +192,6 @@ export default function AddListing() {
   };
 
   const handleTitleInput = (input) => {
-    console.log("Handling title input!");
-
     setListingTitle(input);
   };
 
@@ -190,18 +237,13 @@ export default function AddListing() {
   const handleTimeChange = (event, selectedTime) => {
     const currentTime = selectedTime || time;
     setShowTimePicker(false);
+
     setTime(currentTime);
   };
 
   const handleDurationChange = (input) => {
-    console.log(input);
-
     const pattern = /^\d*$/;
     if (!pattern.test(input)) {
-      if (DEBUG) {
-        console.log("Duration pattern failed!");
-      }
-
       return;
     }
 
@@ -235,6 +277,7 @@ export default function AddListing() {
           onChangeText={handleTitleInput}
         />
 
+        {/* TODO: Bug on iPhone with GooglePlacesAutocomplete */}
         <Text style={styles.label}>Location</Text>
         <ScrollView keyboardShouldPersistTaps={"always"}>
           <GooglePlacesAutocomplete
