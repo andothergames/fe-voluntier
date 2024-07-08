@@ -1,4 +1,5 @@
 // AXIOS ERROR RESPONSE BODY: console.log(err.response.data.msg);
+// SOMETIMES: console.log(err.response.status);
 
 import axios from "axios";
 
@@ -19,14 +20,9 @@ export const getAuthHeader = (token) => {
 };
 
 export const login = (body) => {
-  return voluntierApi
-    .post("login", body)
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      return error;
-    });
+  return voluntierApi.post("login", body).then((response) => {
+    return response.data;
+  });
 };
 
 export const getListings = () => {
