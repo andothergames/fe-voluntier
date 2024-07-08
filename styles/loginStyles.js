@@ -2,7 +2,9 @@ import { StyleSheet } from "react-native";
 
 export const loginStyles = StyleSheet.create({
   container: {
+    // backgroundColor: "#ffff",
     backgroundColor: "#ffff",
+    height: "100%",
   },
   form: {
     margin: 10,
@@ -12,7 +14,6 @@ export const loginStyles = StyleSheet.create({
   },
   input: {
     marginBottom: 20,
-
   },
   inputLabel: {
     fontSize: 17,
@@ -27,24 +28,34 @@ export const loginStyles = StyleSheet.create({
     color: "#001FFF",
   },
   button: {
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 40,
-    marginRight: 'auto',
-    marginLeft: 'auto',
+    marginRight: "auto",
+    marginLeft: "auto",
     backgroundColor: "#7BB9F8",
-    paddingVertical: 10,
+    paddingVertical: 13,
     paddingHorizontal: 20,
     borderRadius: 25,
-    width: '40%',
-    alignContent:'center'
+    // width: '40%',
+    width: "100%",
+    alignContent: "center",
+  },
+  userName: {
+    color: "#303030",
+    fontWeight: "bold",
+    marginTop: 20,
+    marginBottom: 20,
+    fontSize: 20,
+    marginBottom: 30,
+    textAlign: "center",
   },
   white: {
     color: "#fff",
-    textAlign: 'center'
+    textAlign: "center",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   inputControl: {
     backgroundColor: "#fff",
@@ -56,17 +67,17 @@ export const loginStyles = StyleSheet.create({
     color: "#222",
   },
   switch: {
-    marginLeft: 'auto',
+    marginLeft: "auto",
     marginRight: 10,
     transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
   },
   switchText: {
-    color: '#383838',
-    textAlign: 'right',
+    color: "#383838",
+    textAlign: "right",
     paddingRight: 10,
   },
   error: {
     textAlign: "center",
     color: "#001FFF",
-  }
+  },
 });

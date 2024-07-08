@@ -92,7 +92,7 @@ export default function MyListingsScreen() {
         showsHorizontalScrollIndicator={false}
       >
         {myApplications.map((application) => {
-          console.log(application, "here data");
+          // console.log(application, "here data");
           return (
             <TouchableOpacity style={styles.card} key={application.listing_id}>
               <Image
