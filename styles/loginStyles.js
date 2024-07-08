@@ -2,8 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const loginStyles = StyleSheet.create({
   container: {
-    // backgroundColor: "#ffff",
-    backgroundColor: "#ffff",
+    backgroundColor: "#fff",
     height: "100%",
   },
   form: {
@@ -33,11 +32,10 @@ export const loginStyles = StyleSheet.create({
     marginRight: "auto",
     marginLeft: "auto",
     backgroundColor: "#7BB9F8",
-    paddingVertical: 13,
+    paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 25,
-    // width: '40%',
-    width: "100%",
+    width: '40%',
     alignContent: "center",
   },
   userName: {
