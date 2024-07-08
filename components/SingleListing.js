@@ -10,7 +10,7 @@ import { StyleSheet } from "react-native";
 import * as api from "../api";
 
 export default function SingleListing({ route }) {
-  const { listing } = route.params;
+  const { listing, favourites } = route.params;
   const date = new Date(listing.list_date);
   const time = new Date(`1970-01-01T${listing.list_time}`);
   const { user } = useContext(UserContext);
@@ -22,6 +22,7 @@ export default function SingleListing({ route }) {
   useEffect(() => {
     const { list_img_id, list_id } = listing;
 
+    // Fetch img
     if (list_img_id) {
       api
         .getB64Image(list_img_id)
@@ -33,12 +34,11 @@ export default function SingleListing({ route }) {
         });
     }
 
+    // Fetch skills
     if (!skills) {
       api
         .getSkillsForListId(list_id)
         .then((skills) => {
-          console.log("Successfully skills!");
-
           const skillMap = skills.map((skill) => {
             return skill.skill_name;
           });
@@ -46,6 +46,13 @@ export default function SingleListing({ route }) {
           setSkills(skillMap);
         })
         .catch((err) => {});
+    }
+
+    // Check if listing is a vol user's favourite
+    if (user && user.role === "volunteer") {
+      if (favourites.includes(list_id)) {
+        setIsFavourite(true);
+      }
     }
   }, [listing]);
 
@@ -62,8 +69,56 @@ export default function SingleListing({ route }) {
   });
 
   function handleFavouritePress() {
-    setIsFavourite(!isFavourite);
-    postFavourite(listing.list_id, user.vol_id, user.token).then((data) => {});
+    if (!user || !user.vol_id) {
+      alert("You must be logged in to favourite!");
+
+      return;
+    }
+
+    setIsFavourite((currFave) => {
+      return !currFave;
+    });
+
+    let favPromise;
+    if (!isFavourite) {
+      favPromise = api.postFavourite(listing.list_id, user.vol_id, user.token);
+    } else {
+      favPromise = api.deleteFavourite(
+        listing.list_id,
+        user.vol_id,
+        user.token
+      );
+    }
+
+    favPromise
+      .then(() => {
+        console.log("Favourite success!");
+      })
+      .catch((err) => {
+        console.log("ERROR: unable to favourite listing!");
+
+        setIsFavourite((currFave) => {
+          return !currFave;
+        });
+      });
+  }
+
+  // Don't show the favourite icon if org user
+  let favouriteIcon;
+  if (user && user.role !== "volunteer") {
+    favouriteIcon = null;
+  } else {
+    favouriteIcon = (
+      <View style={styles.favourite}>
+        <TouchableOpacity onPress={handleFavouritePress}>
+          <FontAwesomeIcon
+            icon={faHeart}
+            size={35}
+            style={{ color: isFavourite ? "#FFC1C1" : "#ff0505" }}
+          />
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   return (
@@ -78,15 +133,9 @@ export default function SingleListing({ route }) {
             justifyContent: "space-between",
           }}
         ></View>
-        <View style={styles.favourite}>
-          <TouchableOpacity onPress={handleFavouritePress}>
-            <FontAwesomeIcon
-              icon={faHeart}
-              size={35}
-              style={{ color: isFavourite ? "#FFC1C1" : "#ff0505" }}
-            />
-          </TouchableOpacity>
-        </View>
+
+        {favouriteIcon}
+
         <Text style={[styles.text, listingStyles.bold]}>
           Duration:{" "}
           <Text style={listingStyles.normal}>
@@ -114,8 +163,12 @@ export default function SingleListing({ route }) {
             <>
               <Text style={styles.titleText}>Skills:</Text>
               <View style={listingStyles.skillsContainer}>
-                {skills.map((skill) => {
-                  return <Text style={listingStyles.skill}>{skill}</Text>;
+                {skills.map((skill, index) => {
+                  return (
+                    <Text key={index} style={listingStyles.skill}>
+                      {skill}
+                    </Text>
+                  );
                 })}
               </View>
             </>

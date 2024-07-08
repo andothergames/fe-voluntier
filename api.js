@@ -1,3 +1,5 @@
+// AXIOS ERROR RESPONSE BODY: console.log(err.response.data.msg);
+
 import axios from "axios";
 
 const voluntierApi = axios.create({
@@ -55,14 +57,40 @@ export const getMyBadges = (volId, token) => {
     });
 };
 
-export const postFavourite = (list_id, vol_id, token) => {
+export const getFavourites = (volUserId, token) => {
+  console.log("In api get favourites!");
+
   return voluntierApi
-    .post(`favourites/${vol_id}/listings`, { list_id }, getAuthHeader(token))
+    .get(`favourites/${volUserId}/listings`, getAuthHeader(token))
     .then(({ data }) => {
-      return data;
-    })
-    .catch((error) => {
-      console.error(error);
+      return data.favourite_listings;
+    });
+};
+
+export const postFavourite = (list_id, vol_id, token) => {
+  console.log("Posting favourite!");
+
+  return voluntierApi
+    .post(
+      `favourites/${vol_id}/listings`,
+      { list_id: list_id },
+      getAuthHeader(token)
+    )
+    .then(({ data }) => {
+      return data.favourite_listing;
+    });
+};
+
+export const deleteFavourite = (list_id, vol_id, token) => {
+  console.log("Deleting favourite!");
+
+  const authHeaders = getAuthHeader(token).headers;
+  const obj = { data: { list_id: list_id }, headers: authHeaders };
+
+  return voluntierApi
+    .delete(`favourites/${vol_id}/listings`, obj)
+    .then(({ data }) => {
+      return data.favourite;
     });
 };
 
@@ -73,9 +101,13 @@ export const getBadgeLeaderboard = () => {
 };
 
 export const postListing = (listingData, token) => {
-  return voluntierApi.post("/listings").then(({ data }) => {
-    return data.listing;
-  });
+  console.log(listingData);
+
+  return voluntierApi
+    .post("/listings", listingData, getAuthHeader(token))
+    .then(({ data }) => {
+      return data.listing;
+    });
 };
 
 export const getSkillsOptions = () => {
