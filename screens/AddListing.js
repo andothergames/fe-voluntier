@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import axios from "axios";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
@@ -18,7 +17,6 @@ import { useNavigation } from "@react-navigation/native";
 
 import * as postListingValidator from "../validators/post-listing.validator";
 import { DropDown } from "../components/DropDownPicker";
-import { getAuthHeader } from "../api";
 import { UserContext } from "../contexts/user-context";
 import * as api from "../api";
 
