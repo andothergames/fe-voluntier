@@ -12,7 +12,7 @@ import HomeScreen from "../screens/HomeScreen";
 import OrgHomeScreen from "../screens/OrgHomeScreen";
 import SingleListing from "./SingleListing";
 import Login from "./Login";
-
+import { getFavourites } from "../api.js";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const homeIcon = require("../assets/home-icon.png");
@@ -20,10 +20,11 @@ const myListingsIcon = require("../assets/my-listings-icon.png");
 const addListingIcon = require("../assets/add-listing-icon.png");
 const badgeIcon = require("../assets/badge-icon.png");
 
-const TabNavigator = () => {
+const TabNavigator = ({ favourites, setFavourites }) => {
   const { user } = useContext(UserContext);
-
   const [orgListings, setOrgListings] = useState([]);
+
+  console.log('TabNavigator favourites:', favourites);
 
   return (
     <Tab.Navigator
@@ -96,11 +97,18 @@ const TabNavigator = () => {
       {user && user.role === "volunteer" && (
         <Tab.Screen
           name="TabVolHome"
-          component={HomeScreen}
           options={{
             headerShown: false,
           }}
-        />
+        >
+          {(props) => (
+            <HomeScreen
+              {...props}
+              favourites={favourites}
+              setFavourites={setFavourites}
+            />
+          )}
+        </Tab.Screen>
       )}
       {user && user.role === "organisation" && (
         <Tab.Screen
@@ -111,21 +119,28 @@ const TabNavigator = () => {
         >
           {(props) => (
             <OrgHomeScreen
+              {...props}
               setOrgListings={setOrgListings}
               orgListings={orgListings}
             />
           )}
         </Tab.Screen>
       )}
-
       {user && user.role === "volunteer" && (
         <Tab.Screen
           name="TabMyListings"
-          component={MyListingsScreen}
           options={{
             headerShown: false,
           }}
-        />
+        >
+          {(props) => (
+            <MyListingsScreen
+              {...props}
+              favourites={favourites}
+              setFavourites={setFavourites}
+            />
+          )}
+        </Tab.Screen>
       )}
       {user && user.role === "organisation" && (
         <Tab.Screen
@@ -164,25 +179,32 @@ const TabNavigator = () => {
   );
 };
 
-const StackNavigator = ({ isVisible }) => {
+const StackNavigator = ({ isVisible, favourites, setFavourites }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" options={{ headerShown: false }}>
         {() => (
           <>
-            {isVisible && <TabNavigator />}
+            {isVisible && <TabNavigator favourites={favourites} setFavourites={setFavourites}/>}
             {!isVisible && <HomeStack />}
           </>
         )}
       </Stack.Screen>
       <Stack.Screen
         name="SingleListing"
-        component={SingleListing}
         options={{
           headerTitle: "",
           headerBackTitleVisible: false,
         }}
-      />
+      >
+        {(props) => (
+          <SingleListing
+            {...props}
+            favourites={favourites}
+            setFavourites={setFavourites}
+          />
+        )}
+      </Stack.Screen>
       <Stack.Screen
         name="Login"
         component={Login}
@@ -198,10 +220,22 @@ const StackNavigator = ({ isVisible }) => {
 export default function Nav() {
   const { user } = useContext(UserContext);
   const [isVisible, setIsVisible] = useState(false);
+  const [favourites, setFavourites] = useState([]);
 
   useEffect(() => {
     setIsVisible(!!user);
+    if (user) {
+      getFavourites(user.vol_id, user.token).then((data) => {
+        setFavourites(data.map((data) => data));
+      });
+    }
   }, [user]);
 
-  return <StackNavigator isVisible={isVisible} />;
+  return (
+    <StackNavigator
+      isVisible={isVisible}
+      favourites={favourites}
+      setFavourites={setFavourites}
+    />
+  );
 }
