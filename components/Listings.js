@@ -1,17 +1,17 @@
-import { View, FlatList, Pressable } from "react-native";
-import { listingStyles as styles } from "../styles/listingStyles";
-import { useContext, useEffect, useState } from "react";
-import { getListings } from "../api";
-import ListingCard from "./ListingCard";
-import { useNavigation } from "@react-navigation/native";
-import { UserContext } from "../contexts/user-context";
-import * as api from "../api";
+import { View, FlatList, Pressable } from 'react-native';
+import { listingStyles as styles } from '../styles/listingStyles';
+import { useContext, useEffect, useState } from 'react';
+import { getListings } from '../api';
+import ListingCard from './ListingCard';
+import { useNavigation } from '@react-navigation/native';
+import { UserContext } from '../contexts/user-context';
+import * as api from '../api';
 
 export default function Listings() {
   const { user } = useContext(UserContext);
 
   const [listings, setListings] = useState([]);
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState('');
   const navigation = useNavigation();
 
   const [favourites, setFavourites] = useState([]);
@@ -26,7 +26,7 @@ export default function Listings() {
       });
 
     if (user && user.vol_id) {
-      console.log("Getting favourites!");
+      console.log('Getting favourites!');
       api
         .getFavourites(user.vol_id, user.token)
         .then((favourites) => {
@@ -38,14 +38,14 @@ export default function Listings() {
         })
         .catch(({ response }) => {
           if (response.data.status === 404) {
-            console.log("No favourites found!");
+            console.log('No favourites found!');
           }
         });
     }
   }, []);
 
   const handlePress = (listing) => {
-    navigation.navigate("SingleListing", { listing, favourites });
+    navigation.navigate('SingleListing', { listing, favourites });
   };
 
   return (
@@ -58,10 +58,9 @@ export default function Listings() {
               onPress={() => handlePress(item.item)}
               style={({ pressed }) => [
                 {
-                  backgroundColor: pressed ? "rgba(0, 0, 0, 0.1)" : "white",
+                  backgroundColor: pressed ? 'rgba(0, 0, 0, 0.1)' : 'white',
                 },
-              ]}
-            >
+              ]}>
               <ListingCard listing={item.item}></ListingCard>
             </Pressable>
           );
