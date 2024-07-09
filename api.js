@@ -25,11 +25,15 @@ export const login = (body) => {
   });
 };
 
-export const getListings = () => {
-  return voluntierApi.get('listings').then(({ data }) => {
-    return data.listings;
-  });
+export const getListings = (query = '') => {
+  const endpoint = query ? `listings${query}` : 'listings';
+
+  return voluntierApi.get(endpoint)
+    .then(({ data }) => {
+      return data.listings;
+    });
 };
+
 
 export const getOrgListings = (orgId, token) => {
   return voluntierApi
