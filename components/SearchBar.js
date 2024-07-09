@@ -1,29 +1,34 @@
 import { View, Text } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getListings } from "../api";
+import DropDownPicker from "react-native-dropdown-picker";
 
-const data = [
-  { label: "Example 1", value: "1" },
-  { label: "Example 2", value: "2" },
-  { label: "Example 3", value: "3" }
-];
-
-export default function SearchBar() {
+export default function SearchBar({ onSortChange }) {
+  const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: "Date Ascending", value: "?sort_by=date&order=asc" },
+    { label: "Date Descending", value: "?sort_by=date&order=desc" },
+    { label: "Duration Ascending", value: "?sort_by=duration&order=asc" },
+    { label: "Duration Descending", value: "?sort_by=duration&order=desc" },
+  ]);
+
+  useEffect(() => {
+    onSortChange(value);
+  }, [value]);
 
   return (
     <View>
-      <Text>Dropdown Example</Text>
-      <Dropdown
-        data={data}
-        labelField="label"
-        valueField="value"
-        placeholder="Filter By Skill Type"
+      <Text>Sort By</Text>
+      <DropDownPicker
+        open={open}
         value={value}
-        onChange={(item) => {
-          setValue(item.value);
-        }}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
       />
     </View>
   );
 }
+
