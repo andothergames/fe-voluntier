@@ -1,24 +1,24 @@
-import { UserContext } from "../contexts/user-context";
-import { Image, Text } from "react-native";
-import { useState, useEffect, useContext } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import BadgesScreen from "../screens/BadgesScreen";
-import OrgBadgesScreen from "../screens/OrgBadgesScreen";
-import MyListingsScreen from "../screens/MyListingsScreen";
-import AddListingScreen from "../screens/AddListing";
-import HomeStack from "./HomeStack";
-import HomeScreen from "../screens/HomeScreen";
-import OrgHomeScreen from "../screens/OrgHomeScreen";
-import SingleListing from "./SingleListing";
-import Login from "./Login";
-import { getFavourites } from "../api.js";
+import { UserContext } from '../contexts/user-context';
+import { Image, Text } from 'react-native';
+import { useState, useEffect, useContext } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import BadgesScreen from '../screens/BadgesScreen';
+import OrgBadgesScreen from '../screens/OrgBadgesScreen';
+import MyListingsScreen from '../screens/MyListingsScreen';
+import AddListingScreen from '../screens/AddListing';
+import HomeStack from './HomeStack';
+import HomeScreen from '../screens/HomeScreen';
+import OrgHomeScreen from '../screens/OrgHomeScreen';
+import SingleListing from './SingleListing';
+import Login from './Login';
+import { getFavourites } from '../api.js';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-const homeIcon = require("../assets/home-icon.png");
-const myListingsIcon = require("../assets/my-listings-icon.png");
-const addListingIcon = require("../assets/add-listing-icon.png");
-const badgeIcon = require("../assets/badge-icon.png");
+const homeIcon = require('../assets/home-icon.png');
+const myListingsIcon = require('../assets/my-listings-icon.png');
+const addListingIcon = require('../assets/add-listing-icon.png');
+const badgeIcon = require('../assets/badge-icon.png');
 
 const TabNavigator = ({ favourites, setFavourites }) => {
   const { user } = useContext(UserContext);
@@ -29,26 +29,26 @@ const TabNavigator = ({ favourites, setFavourites }) => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarStyle: { backgroundColor: "#7BB9F8" },
+        tabBarStyle: { backgroundColor: '#7BB9F8' },
         tabBarIcon: ({ focused }) => {
           let icon;
-          let tintColor = focused ? "#001FFF" : "#383838";
+          let tintColor = focused ? '#001FFF' : '#383838';
 
-          if (route.name === "TabHome") {
+          if (route.name === 'TabHome') {
             icon = homeIcon;
-          } else if (route.name === "TabVolHome") {
+          } else if (route.name === 'TabVolHome') {
             icon = homeIcon;
-          } else if (route.name === "TabOrgHome") {
+          } else if (route.name === 'TabOrgHome') {
             icon = homeIcon;
-          } else if (route.name === "TabMyListings") {
+          } else if (route.name === 'TabMyListings') {
             icon = myListingsIcon;
-          } else if (route.name === "TabAddListing") {
+          } else if (route.name === 'TabAddListing') {
             icon = addListingIcon;
-          } else if (route.name === "TabBadges") {
+          } else if (route.name === 'TabBadges') {
             icon = badgeIcon;
-          } else if (route.name === "TabOrgBadges") {
+          } else if (route.name === 'TabOrgBadges') {
             icon = badgeIcon;
-          } else if (route.name === "TabVolBadges") {
+          } else if (route.name === 'TabVolBadges') {
             icon = badgeIcon;
           }
 
@@ -61,30 +61,29 @@ const TabNavigator = ({ favourites, setFavourites }) => {
         },
         tabBarLabel: ({ focused }) => {
           let label;
-          let color = focused ? "#001FFF" : "#383838";
+          let color = focused ? '#001FFF' : '#383838';
 
-          if (route.name === "TabHome") {
-            label = "Home";
-          } else if (route.name === "TabVolHome") {
-            label = "Home";
-          } else if (route.name === "TabOrgHome") {
-            label = "Home";
-          } else if (route.name === "TabMyListings") {
-            label = "My Listings";
-          } else if (route.name === "TabAddListing") {
-            label = "Add Listing";
-          } else if (route.name === "TabBadges") {
-            label = "Badges";
-          } else if (route.name === "TabVolBadges") {
-            label = "Badges";
-          } else if (route.name === "TabOrgBadges") {
-            label = "Badges";
+          if (route.name === 'TabHome') {
+            label = 'Home';
+          } else if (route.name === 'TabVolHome') {
+            label = 'Home';
+          } else if (route.name === 'TabOrgHome') {
+            label = 'Home';
+          } else if (route.name === 'TabMyListings') {
+            label = 'My Listings';
+          } else if (route.name === 'TabAddListing') {
+            label = 'Add Listing';
+          } else if (route.name === 'TabBadges') {
+            label = 'Badges';
+          } else if (route.name === 'TabVolBadges') {
+            label = 'Badges';
+          } else if (route.name === 'TabOrgBadges') {
+            label = 'Badges';
           }
 
           return <Text style={{ color: color }}>{label}</Text>;
         },
-      })}
-    >
+      })}>
       {!user && (
         <Tab.Screen
           name="TabHome"
@@ -94,13 +93,12 @@ const TabNavigator = ({ favourites, setFavourites }) => {
           }}
         />
       )}
-      {user && user.role === "volunteer" && (
+      {user && user.role === 'volunteer' && (
         <Tab.Screen
           name="TabVolHome"
           options={{
             headerShown: false,
-          }}
-        >
+          }}>
           {(props) => (
             <HomeScreen
               {...props}
@@ -110,13 +108,12 @@ const TabNavigator = ({ favourites, setFavourites }) => {
           )}
         </Tab.Screen>
       )}
-      {user && user.role === "organisation" && (
+      {user && user.role === 'organisation' && (
         <Tab.Screen
           name="TabOrgHome"
           options={{
             headerShown: false,
-          }}
-        >
+          }}>
           {(props) => (
             <OrgHomeScreen
               {...props}
@@ -126,13 +123,12 @@ const TabNavigator = ({ favourites, setFavourites }) => {
           )}
         </Tab.Screen>
       )}
-      {user && user.role === "volunteer" && (
+      {user && user.role === 'volunteer' && (
         <Tab.Screen
           name="TabMyListings"
           options={{
             headerShown: false,
-          }}
-        >
+          }}>
           {(props) => (
             <MyListingsScreen
               {...props}
@@ -142,13 +138,12 @@ const TabNavigator = ({ favourites, setFavourites }) => {
           )}
         </Tab.Screen>
       )}
-      {user && user.role === "organisation" && (
+      {user && user.role === 'organisation' && (
         <Tab.Screen
           name="TabAddListing"
           options={{
             headerShown: false,
-          }}
-        >
+          }}>
           {(props) => (
             <AddListingScreen
               setOrgListings={setOrgListings}
@@ -157,7 +152,7 @@ const TabNavigator = ({ favourites, setFavourites }) => {
           )}
         </Tab.Screen>
       )}
-      {user && user.role === "organisation" && (
+      {user && user.role === 'organisation' && (
         <Tab.Screen
           name="TabOrgBadges"
           component={OrgBadgesScreen}
@@ -166,7 +161,7 @@ const TabNavigator = ({ favourites, setFavourites }) => {
           }}
         />
       )}
-      {user && user.role === "volunteer" && (
+      {user && user.role === 'volunteer' && (
         <Tab.Screen
           name="TabVolBadges"
           component={BadgesScreen}
@@ -182,10 +177,17 @@ const TabNavigator = ({ favourites, setFavourites }) => {
 const StackNavigator = ({ isVisible, favourites, setFavourites }) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" options={{ headerShown: false }}>
+      <Stack.Screen
+        name="Home"
+        options={{ headerShown: false }}>
         {() => (
           <>
-            {isVisible && <TabNavigator favourites={favourites} setFavourites={setFavourites}/>}
+            {isVisible && (
+              <TabNavigator
+                favourites={favourites}
+                setFavourites={setFavourites}
+              />
+            )}
             {!isVisible && <HomeStack />}
           </>
         )}
@@ -193,10 +195,9 @@ const StackNavigator = ({ isVisible, favourites, setFavourites }) => {
       <Stack.Screen
         name="SingleListing"
         options={{
-          headerTitle: "",
+          headerTitle: '',
           headerBackTitleVisible: false,
-        }}
-      >
+        }}>
         {(props) => (
           <SingleListing
             {...props}
@@ -225,9 +226,11 @@ export default function Nav() {
   useEffect(() => {
     setIsVisible(!!user);
     if (user) {
-      getFavourites(user.vol_id, user.token).then((data) => {
-        setFavourites(data.map((data) => data));
-      });
+      getFavourites(user.vol_id, user.token)
+        .then((data) => {
+          setFavourites(data.map((data) => data));
+        })
+        .catch((err) => console.log('Error fetching favourite listings', err));
     }
   }, [user]);
 
