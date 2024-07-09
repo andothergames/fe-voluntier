@@ -1,72 +1,67 @@
-import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { singleListingStyles as styles } from '../styles/singleListingStyles';
-import { postFavourite, deleteFavourite, getFavourites } from '../api';
-import { UserContext } from '../contexts/user-context';
-import { useContext, useEffect, useState } from 'react';
+import { View, ScrollView, Text, Image, TouchableOpacity } from "react-native";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { singleListingStyles as styles } from "../styles/singleListingStyles";
+import { postFavourite, deleteFavourite, getFavourites } from "../api";
+import { UserContext } from "../contexts/user-context";
+import { useContext, useEffect, useState } from "react";
 
-export default function SingleListing({ route }) {
+export default function SingleListing({ route, favourites, setFavourites }) {
   const { listing } = route.params;
   const date = new Date(listing.list_date);
   const time = new Date(`1970-01-01T${listing.list_time}`);
   const { user } = useContext(UserContext);
   const [isFavourite, setIsFavourite] = useState(false);
-  const [favourites, setFavourites] = useState([]);
+  // const [favourites, setFavourites] = useState([]);
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    getFavourites(user.vol_id, user.token)
-      .then((data) => {
-        const favouritesArr = data.map((listing) => listing.list_id);
-        setFavourites(favouritesArr);
-        if (favouritesArr.includes(listing.list_id)) {
-          setIsFavourite(true);
-        }
-      })
-      .catch((err) => {
-        console.log('Error fetching favourites:', err);
-      });
-  }, []);
+    const favouriteListing = favourites.find(favourite => favourite.list_id === listing.list_id);
+    if (favouriteListing) {
+      setIsFavourite(true);
+    } else {
+      setIsFavourite(false);
+    }
+  }, [favourites]);
 
-  const formattedDate = date.toLocaleString('en-GB', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
+  const formattedDate = date.toLocaleString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
   });
 
-  const formattedTime = time.toLocaleTimeString('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
+  const formattedTime = time.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: true,
   });
 
   function handleFavouritePress() {
-    console.log(favourites);
+  
     if (disabled) return;
     setDisabled(true);
     if (isFavourite) {
       deleteFavourite(listing.list_id, user.vol_id, user.token)
-        .then(() => {
-          setFavourites((currVal) =>
-            currVal.filter((id) => id !== listing.list_id)
-          );
-          setIsFavourite(false);
-        })
-        .catch((err) => {
-          console.log('error:', err);
-        })
-        .finally(() => {
-          setTimeout(() => setDisabled(false), 2000);
-        });
+  .then(() => {
+    setFavourites((currVal) =>
+      currVal.filter((item) => item.list_id !== listing.list_id)
+    );
+    setIsFavourite(false);
+  })
+  .catch((err) => {
+    console.log("error:", err);
+  })
+  .finally(() => {
+    setTimeout(() => setDisabled(false), 2000);
+  });
     } else {
       postFavourite(listing.list_id, user.vol_id, user.token)
         .then(() => {
-          setFavourites((currVal) => [...currVal, listing.list_id]);
+          setFavourites((currVal) => [...currVal, listing]);
           setIsFavourite(true);
         })
         .catch((err) => {
-          console.log('error:', err);
+          console.log("error:", err);
         })
         .finally(() => {
           setTimeout(() => setDisabled(false), 2000);
@@ -81,18 +76,17 @@ export default function SingleListing({ route }) {
         <Text style={styles.orgName}>{listing.org_name}</Text>
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}></View>
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        ></View>
         <View style={styles.favourite}>
-          <TouchableOpacity
-            onPress={handleFavouritePress}
-            disabled={disabled}>
+          <TouchableOpacity onPress={handleFavouritePress} disabled={disabled}>
             <FontAwesomeIcon
               icon={faHeart}
               size={35}
-              style={{ color: isFavourite ? '#ff0505' : '#FFC1C1' }}
+              style={{ color: isFavourite ? "#ff0505" : "#FFC1C1" }}
             />
           </TouchableOpacity>
         </View>
@@ -103,8 +97,9 @@ export default function SingleListing({ route }) {
 
         <View>
           <Image
-            source={require('../assets/listing-image.jpg')}
-            style={styles.image}>
+            source={require("../assets/listing-image.jpg")}
+            style={styles.image}
+          >
             {listing.list_img}
           </Image>
         </View>

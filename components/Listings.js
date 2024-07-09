@@ -7,14 +7,14 @@ import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../contexts/user-context';
 import * as api from '../api';
 
-export default function Listings() {
+export default function Listings({favourites, setFavourites}) {
   const { user } = useContext(UserContext);
 
   const [listings, setListings] = useState([]);
   const [err, setErr] = useState('');
   const navigation = useNavigation();
 
-  const [favourites, setFavourites] = useState([]);
+  // const [favourites, setFavourites] = useState([]);
 
   useEffect(() => {
     getListings()
@@ -25,24 +25,25 @@ export default function Listings() {
         setErr(error);
       });
 
-    if (user && user.vol_id) {
-      console.log('Getting favourites!');
-      api
-        .getFavourites(user.vol_id, user.token)
-        .then((favourites) => {
-          const favArray = favourites.map((favourite) => {
-            return favourite.list_id;
-          });
+    // if (user && user.vol_id) {
+    //   console.log('Getting favourites!');
+    //   api
+    //     // .getFavourites(user.vol_id, user.token)
+    //     .then((favourites) => {
+    //       const favArray = favourites.map((favourite) => {
+    //         return favourite.list_id;
+    //       });
 
-          setFavourites(favArray);
-        })
-        .catch(({ response }) => {
-          if (response.data.status === 404) {
-            console.log('No favourites found!');
-          }
-        });
-    }
+    //       setFavourites(favArray);
+    //     })
+    //     .catch(({ response }) => {
+    //       if (response.data.status === 404) {
+    //         console.log('No favourites found!');
+    //       }
+    //     });
+    // }
   }, []);
+  
 
   const handlePress = (listing) => {
     navigation.navigate('SingleListing', { listing, favourites });

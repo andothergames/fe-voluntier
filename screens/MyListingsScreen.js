@@ -13,30 +13,30 @@ import {
 
 import { getAuthHeader } from '../api';
 
-export default function MyListingsScreen() {
-  const [favListings, setFavListings] = useState([]);
+export default function MyListingsScreen({favourites, setFavourites}) {
+  // const [favListings, setFavListings] = useState([]);
   const [myApplications, setMyApplications] = useState([]);
   const { user } = useContext(UserContext);
 
   const userId = user.vol_id;
 
   useEffect(() => {
-    getFavListings(userId);
+    // getFavListings(userId);
     getVolApplications(userId);
   }, []);
-
-  const getFavListings = (userId) => {
-    userId = user.vol_id;
-    axios
-      .get(
-        `https://voluntier-api.codermatt.com/api/favourites/3/listings`,
-        getAuthHeader(user.token)
-      )
-      .then((data) => setFavListings(data.data.favourite_listings))
-      .catch((err) =>
-        console.log('error fetching your favourite listings:', err)
-      );
-  };
+console.log(favourites, 'favourites')
+  // const getFavListings = (userId) => {
+  //   userId = user.vol_id;
+  //   axios
+  //     .get(
+  //       `https://voluntier-api.codermatt.com/api/favourites/3/listings`,
+  //       getAuthHeader(user.token)
+  //     )
+  //     .then((data) => setFavListings(data.data.favourite_listings))
+  //     .catch((err) =>
+  //       console.log('error fetching your favourite listings:', err)
+  //     );
+  // };
   const getVolApplications = (userId) => {
     userId = user.vol_id;
     // user.vol_id;
@@ -61,11 +61,13 @@ export default function MyListingsScreen() {
         style={styles.scrollView}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
-        {favListings.map((listing) => {
+
+        {favourites.map((listing) => {
+          
           return (
             <TouchableOpacity
               style={styles.card}
-              key={listing.fav_lists_id}>
+              key={listing.list_id}>
               <Image
                 source={require('../assets/list-img1.png')}
                 style={styles.image}
