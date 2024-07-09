@@ -4,10 +4,16 @@ import { useContext, useEffect, useState } from 'react';
 import { getListings } from '../api';
 import ListingCard from './ListingCard';
 import { useNavigation } from '@react-navigation/native';
-import * as api from '../api';
+import { UserContext } from '../contexts/user-context';
 
 export default function Listings({ listings }) {
   const navigation = useNavigation();
+  const { user } = useContext(UserContext);
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    setDisabled(!user);
+  }, [user]);
 
   const handlePress = (listing) => {
     navigation.navigate('SingleListing', { listing });
@@ -19,13 +25,13 @@ export default function Listings({ listings }) {
         data={listings}
         renderItem={({ item }) => (
           <Pressable
+            disabled={disabled}
             onPress={() => handlePress(item)}
             style={({ pressed }) => [
               {
                 backgroundColor: pressed ? 'rgba(0, 0, 0, 0.1)' : 'white',
               },
-            ]}
-          >
+            ]}>
             <ListingCard listing={item}></ListingCard>
           </Pressable>
         )}
