@@ -1,18 +1,18 @@
-import { UserContext } from "../contexts/user-context";
-import { useContext, useState, useEffect } from "react";
-import { View, Pressable, Text, Image, StyleSheet } from "react-native";
-import { getOrgListings } from "../api";
-import ListingCard from "../components/ListingCard";
-import { useNavigation } from "@react-navigation/native";
-import { badgeStyles as bstyles } from "../styles/badgeStyles";
-import { listingStyles as styles } from "../styles/listingStyles";
-import { ScrollView } from "react-native-gesture-handler";
+import { UserContext } from '../contexts/user-context';
+import { useContext, useState, useEffect } from 'react';
+import { View, Pressable, Text, Image, StyleSheet } from 'react-native';
+import { getOrgListings } from '../api';
+import ListingCard from '../components/ListingCard';
+import { useNavigation } from '@react-navigation/native';
+import { badgeStyles as bstyles } from '../styles/badgeStyles';
+import { listingStyles as styles } from '../styles/listingStyles';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function OrgBadgesScreen() {
   const { user } = useContext(UserContext);
   const [orgListings, setOrgListings] = useState([]);
   const [applicants, setApplicants] = useState({});
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState('');
   const [tickStatus, setTickStatus] = useState({});
   const navigation = useNavigation();
 
@@ -23,8 +23,7 @@ export default function OrgBadgesScreen() {
         const applicantsData = {};
         const promises = listings.map((listing) => {
           return getApplicants(user.org_id, listing.list_id, user.token)
-          .then((applicantsForListing) => {
-              console.log(applicantsForListing);
+            .then((applicantsForListing) => {
               applicantsData[listing.list_id] = applicantsForListing;
             })
             .catch((error) => {
@@ -46,23 +45,25 @@ export default function OrgBadgesScreen() {
   }, [user.org_id, user.token]);
 
   const handlePress = (listing) => {
-    navigation.navigate("SingleListing", { listing });
+    navigation.navigate('SingleListing', { listing });
   };
 
   const handleTick = (listingId, volId, appId) => {
-    patchApplication(appId, user.token).then((data) => {
-      console.log("Accepted");
-    })
-    .catch((error) => {
-      setErr(error.message);
-    });
+    patchApplication(appId, user.token)
+      .then((data) => {
+        console.log('Accepted');
+      })
+      .catch((error) => {
+        setErr(error.message);
+      });
 
-    confirmAttendance(appId, user.token).then((data) => {
-      console.log("Attendance confirmed");
-    })
-    .catch((error) => {
-      setErr(error.message);
-    });
+    confirmAttendance(appId, user.token)
+      .then((data) => {
+        console.log('Attendance confirmed');
+      })
+      .catch((error) => {
+        setErr(error.message);
+      });
 
     toggleTick(listingId, volId);
   };
@@ -81,30 +82,33 @@ export default function OrgBadgesScreen() {
     <ScrollView style={styles.container}>
       {orgListings.map((listing) => (
         <View key={listing.list_id}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}>
             <View style={bstyles.badgesContainer}>
               {(applicants[listing.list_id] || []).map((vol) => {
                 const isTicked = tickStatus[listing.list_id]?.[vol.vol_id];
                 return (
-                  <View key={vol.vol_id} style={bstyles.badgeItem}>
+                  <View
+                    key={vol.vol_id}
+                    style={bstyles.badgeItem}>
                     <Image
-                      source={require("../assets/account-icon.png")}
+                      source={require('../assets/account-icon.png')}
                       style={bstyles.badgeIcon}
                     />
                     <Pressable
                       onPress={() =>
                         handleTick(listing.list_id, vol.vol_id, vol.app_id)
-                      }
-                    >
+                      }>
                       <Image
                         source={
                           isTicked
-                            ? require("../assets/tick-fill-icon.png")
-                            : require("../assets/tick-icon.png")
+                            ? require('../assets/tick-fill-icon.png')
+                            : require('../assets/tick-icon.png')
                         }
                         style={[
                           tickStyles.tick,
-                          isTicked && { tintColor: "green" },
+                          isTicked && { tintColor: 'green' },
                         ]}
                       />
                     </Pressable>
@@ -132,10 +136,10 @@ export default function OrgBadgesScreen() {
 }
 
 // THS NEEDS MOVING TO API FILE
-import axios from "axios";
+import axios from 'axios';
 
 const voluntierApi = axios.create({
-  baseURL: "https://voluntier-api.codermatt.com/api/",
+  baseURL: 'https://voluntier-api.codermatt.com/api/',
 });
 
 const getAuthHeader = (token) => {
@@ -159,14 +163,10 @@ const getApplicants = (orgId, listingId, token) => {
 
 const patchApplication = (appId, token) => {
   return voluntierApi
-    .patch(
-      `applications/${appId}`,
-      { accept: true },
-      getAuthHeader(token)
-    )
+    .patch(`applications/${appId}`, { accept: true }, getAuthHeader(token))
     .then(({ data }) => {
       return data.application;
-    })
+    });
 };
 
 const confirmAttendance = (appId, token) => {
@@ -174,8 +174,7 @@ const confirmAttendance = (appId, token) => {
     .patch(`applications/${appId}/confirm-attendance`, {}, getAuthHeader(token))
     .then(({ data }) => {
       return data.application;
-    })
-
+    });
 };
 
 const tickStyles = StyleSheet.create({
