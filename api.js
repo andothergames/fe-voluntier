@@ -1,3 +1,9 @@
+
+=======
+// AXIOS ERROR RESPONSE BODY: console.log(err.response.data.msg);
+// SOMETIMES: console.log(err.response.status);
+
+
 import axios from "axios";
 
 const voluntierApi = axios.create({
@@ -18,6 +24,7 @@ export const login = (body) => {
   });
 };
 
+
 export const getListings = (query = "") => {
   const endpoint = query ? `listings${query}` : "listings";
 
@@ -25,6 +32,30 @@ export const getListings = (query = "") => {
     return data.listings;
   });
 };
+
+=======
+export const getListings = (sortOption = "", searchQuery = "") => {
+  let endpoint = "listings";
+  const params = [];
+
+  if (sortOption) {
+    // Check if sortOption already starts with '?'
+    if (sortOption.startsWith("?")) {
+      params.push(sortOption.substr(1)); // Remove the leading '?' if present
+    } else {
+      params.push(sortOption); // Otherwise, use it as is
+    }
+  }
+
+  if (searchQuery) params.push(`search=${searchQuery}`);
+
+  if (params.length) endpoint += `?${params.join("&")}`;
+
+  return voluntierApi.get(endpoint).then(({ data }) => {
+    return data.listings;
+  });
+};
+
 
 export const getOrgListings = (orgId, token) => {
   return voluntierApi
@@ -49,6 +80,11 @@ export const getMyBadges = (volId, token) => {
 };
 
 export const getFavourites = (volUserId, token) => {
+
+=======
+  console.log("In api get favourites!");
+
+
   return voluntierApi
     .get(`favourites/${volUserId}/listings`, getAuthHeader(token))
     .then(({ data }) => {
