@@ -1,9 +1,3 @@
-
-=======
-// AXIOS ERROR RESPONSE BODY: console.log(err.response.data.msg);
-// SOMETIMES: console.log(err.response.status);
-
-
 import axios from "axios";
 
 const voluntierApi = axios.create({
@@ -24,16 +18,6 @@ export const login = (body) => {
   });
 };
 
-
-export const getListings = (query = "") => {
-  const endpoint = query ? `listings${query}` : "listings";
-
-  return voluntierApi.get(endpoint).then(({ data }) => {
-    return data.listings;
-  });
-};
-
-=======
 export const getListings = (sortOption = "", searchQuery = "") => {
   let endpoint = "listings";
   const params = [];
@@ -55,7 +39,6 @@ export const getListings = (sortOption = "", searchQuery = "") => {
     return data.listings;
   });
 };
-
 
 export const getOrgListings = (orgId, token) => {
   return voluntierApi
@@ -80,10 +63,7 @@ export const getMyBadges = (volId, token) => {
 };
 
 export const getFavourites = (volUserId, token) => {
-
-=======
   console.log("In api get favourites!");
-
 
   return voluntierApi
     .get(`favourites/${volUserId}/listings`, getAuthHeader(token))
@@ -156,7 +136,7 @@ export const getB64Image = (imgId) => {
   });
 };
 
-export const postApplications = ( body, token) => {
+export const postApplications = (body, token) => {
   return voluntierApi
     .post(`applications`, body, getAuthHeader(token))
     .then(({ data }) => {
@@ -171,4 +151,4 @@ export const getApplications = (volId, token) => {
     .then(({ data }) => {
       return data.applications;
     });
-}
+};
