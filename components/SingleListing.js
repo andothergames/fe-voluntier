@@ -26,7 +26,6 @@ export default function SingleListing({
   const [disabled, setDisabled] = useState(false);
   const [isApplied, setIsApplied] = useState(false);
   const [disabledApply, setDisabledApply] = useState(false);
-  console.log(myApplications, 'my applications');
 
   useEffect(() => {
     const favouriteListing = favourites.find(
@@ -108,6 +107,9 @@ export default function SingleListing({
       })
       .catch((err) => {
         console.log('error:', err);
+      })
+      .finally(() => {
+        setDisabledApply(true);
       });
   }
 
