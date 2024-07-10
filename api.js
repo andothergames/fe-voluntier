@@ -13,13 +13,20 @@ export const getAuthHeader = (token) => {
 };
 
 export const login = (body) => {
+  console.log();
   return voluntierApi.post("login", body).then((response) => {
     return response.data;
   });
 };
 
-export const createAccount = (body) => {
+export const createVolAccount = (body) => {
   return voluntierApi.post("vol", body).then((response) => {
+    return response.data;
+  });
+};
+
+export const createOrgAccount = (body) => {
+  return voluntierApi.post("org", body).then((response) => {
     return response.data;
   });
 };
@@ -148,7 +155,6 @@ export const postApplications = (body, token) => {
   return voluntierApi
     .post(`applications`, body, getAuthHeader(token))
     .then(({ data }) => {
-      console.log(data);
       return data.applications;
     });
 };
