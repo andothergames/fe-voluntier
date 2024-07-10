@@ -113,27 +113,6 @@ export default function SingleListing({
       });
   }
 
-  // function handleApplicationPress() {
-  //   const body = {
-  //     listing_id: listing.list_id,
-  //     vol_user_id: user.vol_id,
-  //   };
-  //   // if (disabledApply) return;
-  //   // setDisabledApply(true);
-  //   postApplications(body, user.token)
-  //     .then(() => {
-  //       console.log('application posted');
-  //       setMyApplications((currVal) => [...currVal, listing]);
-  //       // setIsApplied(true);
-  //     })
-  //     .catch((err) => {
-  //       console.log('error:', err);
-  //     });
-  //   // .finally(() => {
-  //   //   setDisabledApply(false);
-  //   // });
-  // }
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.card}>
@@ -145,18 +124,19 @@ export default function SingleListing({
             alignItems: 'center',
             justifyContent: 'space-between',
           }}></View>
-
-        <View style={styles.favourite}>
-          <TouchableOpacity
-            onPress={handleFavouritePress}
-            disabled={disabled}>
-            <FontAwesomeIcon
-              icon={faHeart}
-              size={35}
-              style={{ color: isFavourite ? '#ff0505' : '#FFC1C1' }}
-            />
-          </TouchableOpacity>
-        </View>
+        {user && user.vol_id ? (
+          <View style={styles.favourite}>
+            <TouchableOpacity
+              onPress={handleFavouritePress}
+              disabled={disabled}>
+              <FontAwesomeIcon
+                icon={faHeart}
+                size={35}
+                style={{ color: isFavourite ? '#ff0505' : '#FFC1C1' }}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : null}
 
         <Text style={styles.text}>Duration: {listing.list_duration} hours</Text>
         <Text style={styles.text}>
@@ -172,21 +152,23 @@ export default function SingleListing({
         </View>
         <Text style={styles.titleText}>What you'll be doing:</Text>
         <Text style={styles.text}>{listing.list_description}</Text>
-        <View style={{ marginHorizontal: 'auto' }}>
-          <TouchableOpacity
-            style={styles.applyBtn}
-            onPress={handleApplicationPress}
-            disabled={disabledApply}>
-            <Text
-              style={{
-                color: 'white',
-                textAlign: 'center',
-                fontWeight: 'bold',
-              }}>
-              {isApplied ? 'Applied' : 'Apply'}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {user && user.vol_id ? (
+          <View style={{ marginHorizontal: 'auto' }}>
+            <TouchableOpacity
+              style={styles.applyBtn}
+              onPress={handleApplicationPress}
+              disabled={disabledApply}>
+              <Text
+                style={{
+                  color: 'white',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                }}>
+                {isApplied ? 'Applied' : 'Apply'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
       </View>
     </ScrollView>
   );
