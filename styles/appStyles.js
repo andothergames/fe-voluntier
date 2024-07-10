@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { listingStyles } from "./listingStyles";
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,5 +24,13 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+  },
+  listingsText: {
+    fontSize: 16,
+    marginTop: 20,
+    marginRight: "auto",
+    marginLeft: "auto",
+    textAlign: "center",
+    color: "#001FFF"
   },
 });
