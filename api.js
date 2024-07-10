@@ -1,15 +1,8 @@
-// AXIOS ERROR RESPONSE BODY: console.log(err.response.data.msg);
-// SOMETIMES: console.log(err.response.status);
-
-import axios from 'axios';
+import axios from "axios";
 
 const voluntierApi = axios.create({
-  baseURL: 'https://voluntier-api.codermatt.com/api/',
+  baseURL: "https://voluntier-api.codermatt.com/api/",
 });
-
-// const voluntierApi = axios.create({
-//   baseURL: "http://localhost:9090/api/",
-// });
 
 export const getAuthHeader = (token) => {
   return {
@@ -20,20 +13,18 @@ export const getAuthHeader = (token) => {
 };
 
 export const login = (body) => {
-  return voluntierApi.post('login', body).then((response) => {
+  return voluntierApi.post("login", body).then((response) => {
     return response.data;
   });
 };
 
-export const getListings = (query = '') => {
-  const endpoint = query ? `listings${query}` : 'listings';
+export const getListings = (query = "") => {
+  const endpoint = query ? `listings${query}` : "listings";
 
-  return voluntierApi.get(endpoint)
-    .then(({ data }) => {
-      return data.listings;
-    });
+  return voluntierApi.get(endpoint).then(({ data }) => {
+    return data.listings;
+  });
 };
-
 
 export const getOrgListings = (orgId, token) => {
   return voluntierApi
@@ -44,7 +35,7 @@ export const getOrgListings = (orgId, token) => {
 };
 
 export const getBadges = () => {
-  return voluntierApi.get('badges').then(({ data }) => {
+  return voluntierApi.get("badges").then(({ data }) => {
     return data.badges;
   });
 };
@@ -58,8 +49,6 @@ export const getMyBadges = (volId, token) => {
 };
 
 export const getFavourites = (volUserId, token) => {
-  console.log('In api get favourites!');
-
   return voluntierApi
     .get(`favourites/${volUserId}/listings`, getAuthHeader(token))
     .then(({ data }) => {
@@ -68,8 +57,6 @@ export const getFavourites = (volUserId, token) => {
 };
 
 export const postFavourite = (list_id, vol_id, token) => {
-  // console.log('Posting favourite!');
-
   return voluntierApi
     .post(
       `favourites/${vol_id}/listings`,
@@ -77,7 +64,6 @@ export const postFavourite = (list_id, vol_id, token) => {
       getAuthHeader(token)
     )
     .then(({ data }) => {
-      // console.log('works adding fav');
       return data.favourite_listing;
     });
 };
@@ -88,42 +74,28 @@ export const deleteFavourite = (list_id, vol_id, token) => {
       data: { list_id: list_id },
     })
     .then(({ data }) => {
-      // console.log('works adding fav');
       return data.favourite_listing;
     });
 };
 
-// export const deleteFavourite = (list_id, vol_id, token) => {
-//   // console.log('Deleting favourite!');
-
-//   const authHeaders = getAuthHeader(token).headers;
-//   const obj = { data: { list_id: list_id }, headers: authHeaders };
-
-//   return voluntierApi
-//     .delete(`favourites/${vol_id}/listings`, obj)
-//     .then(({ data }) => {
-//       return data.favourite;
-//     });
-// };
-
 export const getBadgeLeaderboard = () => {
-  return voluntierApi.get('leaderboard').then(({ data }) => {
+  return voluntierApi.get("leaderboard").then(({ data }) => {
     return data.leaderboard;
   });
 };
 
 export const postListing = (listingData, token) => {
-  console.log(listingData);
+  // console.log(listingData);
 
   return voluntierApi
-    .post('/listings', listingData, getAuthHeader(token))
+    .post("/listings", listingData, getAuthHeader(token))
     .then(({ data }) => {
       return data.listing;
     });
 };
 
 export const getSkillsOptions = () => {
-  return voluntierApi.get('/skills').then(({ data }) => {
+  return voluntierApi.get("/skills").then(({ data }) => {
     return data.skills;
   });
 };
@@ -147,3 +119,20 @@ export const getB64Image = (imgId) => {
     return data.image;
   });
 };
+
+export const postApplications = ( body, token) => {
+  return voluntierApi
+    .post(`applications`, body, getAuthHeader(token))
+    .then(({ data }) => {
+      console.log(data);
+      return data.applications;
+    });
+};
+
+export const getApplications = (volId, token) => {
+  return voluntierApi
+    .get(`applications/vol/${volId}`, getAuthHeader(token))
+    .then(({ data }) => {
+      return data.applications;
+    });
+}
