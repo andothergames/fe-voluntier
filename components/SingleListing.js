@@ -7,6 +7,7 @@ import {
   deleteFavourite,
   getFavourites,
   postApplications,
+  getB64Image
 } from '../api';
 import { UserContext } from '../contexts/user-context';
 import { useContext, useEffect, useState } from 'react';
@@ -26,6 +27,8 @@ export default function SingleListing({
   const [disabled, setDisabled] = useState(false);
   const [isApplied, setIsApplied] = useState(false);
   const [disabledApply, setDisabledApply] = useState(false);
+  const [img, setImg] = useState(null);
+  const [placeholder, setPlaceholder] = useState('');
 
   useEffect(() => {
     const favouriteListing = favourites.find(
@@ -107,6 +110,41 @@ export default function SingleListing({
       });
   }
 
+   //image handling
+
+   const imagePlaceholders = {
+    0: require('../assets/images/volunteer.jpg'),
+    1: require('../assets/images/garden-cleanup.jpg'),
+    2: require('../assets/images/beach-cleanup.jpg'),
+    3: require('../assets/images/fun-run.jpg'),
+    4: require('../assets/images/food-bank.jpg'),
+    5: require('../assets/images/garden-cleanup.jpg'),
+    6: require('../assets/images/book-sale.jpg'),
+    7: require('../assets/images/dinner-service.jpg'),
+    8: require('../assets/images/sports-coaching.jpg'),
+  };
+  
+  useEffect(() => {
+    const { list_img_id } = listing;
+    // Get image if not null
+    if (list_img_id) {
+      getB64Image(list_img_id)
+        .then(({ img_b64_data }) => {
+          setImg(img_b64_data);
+        })
+        .catch((err) => {
+          console.log('ERROR: Cannot fetch image!');
+        });
+    } else {
+      // Get placeholder image
+      if (imagePlaceholders[listing.list_id]) {
+        setPlaceholder(imagePlaceholders[listing.list_id])
+      } else {
+        setPlaceholder(imagePlaceholders[0])
+      }
+    }
+  }, [listing]);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.card}>
@@ -138,11 +176,14 @@ export default function SingleListing({
         </Text>
 
         <View>
-          <Image
-            source={require('../assets/listing-image.jpg')}
-            style={styles.image}>
-            {listing.list_img}
-          </Image>
+          {img ? (
+            <Image source={{ uri: img }} style={styles.image} />
+          ) : (
+            <Image
+              source={placeholder}
+              style={styles.image}
+            />
+          )}
         </View>
         <Text style={styles.titleText}>What you'll be doing:</Text>
         <Text style={styles.text}>{listing.list_description}</Text>

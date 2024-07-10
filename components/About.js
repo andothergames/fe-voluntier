@@ -10,7 +10,7 @@ export default function About() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <Image source={require("../assets/listing-image.jpg")} style={[styles.image, { width: imageWidth }]} />
+      <Image source={require("../assets/images/volunteers-needed.jpg")} style={[styles.image, { width: imageWidth }]} />
         <Text style={styles.text}>
           Voluntier is a platform that connects volunteers with organisations that
           need help. We believe that everyone has something to offer, and that by
