@@ -29,7 +29,6 @@ export default function SearchBar({ onSortChange, onSearch }) {
           ]}
         >
           <VolunteerSearchBar onSearch={onSearch} />
-          <Text>Sort By</Text>
           <DropDownPicker
             open={open}
             value={value}
@@ -38,6 +37,12 @@ export default function SearchBar({ onSortChange, onSearch }) {
             setValue={setValue}
             setItems={setItems}
             containerStyle={styles.dropdown}
+            placeholder="Sort by Category"
+            placeholderStyle={styles.placeholder}
+            dropDownContainerStyle={styles.dropDownContainer}
+            style={styles.picker}
+            textStyle={styles.text}
+            listItemContainerStyle={styles.listItemContainer}
           />
         </View>
       )}
@@ -47,13 +52,38 @@ export default function SearchBar({ onSortChange, onSearch }) {
 
 const styles = StyleSheet.create({
   dropdownContainer: {
-    zIndex: 1000, // Ensure the dropdown is above other components
-    marginBottom: 20,
+    zIndex: 1000,
+    marginBottom: 0,
+    marginRight: 10,
+    marginLeft: 10,
+    borderColor: '#7BB9F8',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 6,
+    color: "gray",
   },
   dropdownContainerOpen: {
-    marginBottom: 150, // Add space below dropdown when open
+    marginBottom: 160,
   },
   dropdown: {
     width: "100%",
+  },
+  placeholder: {
+    color: "gray",
+  },
+  text: {
+    color: "gray",
+  },
+  picker: {
+    borderRadius: 10,
+    borderColor: "gray",
+    borderWidth: 1,
+  },
+  dropDownContainer: {
+    borderRadius: 10,
+    borderColor: "gray",
+  },
+  listItemContainer: {
+    height: 40,
   },
 });
