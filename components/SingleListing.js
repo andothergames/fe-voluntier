@@ -23,8 +23,10 @@ export default function SingleListing({
   const time = new Date(`1970-01-01T${listing.list_time}`);
   const { user } = useContext(UserContext);
   const [isFavourite, setIsFavourite] = useState(false);
-
   const [disabled, setDisabled] = useState(false);
+  const [isApplied, setIsApplied] = useState(false);
+  const [disabledApply, setDisabledApply] = useState(false);
+  console.log(myApplications, 'my applications');
 
   useEffect(() => {
     const favouriteListing = favourites.find(
@@ -35,7 +37,17 @@ export default function SingleListing({
     } else {
       setIsFavourite(false);
     }
-  }, [favourites]);
+    const appliedListing = myApplications.find(
+      (application) => application.listing_id === listing.list_id
+    );
+    if (appliedListing) {
+      setIsApplied(true);
+      setDisabledApply(true);
+    } else {
+      setIsApplied(false);
+      setDisabledApply(false);
+    }
+  }, [favourites, myApplications, listing]);
 
   const formattedDate = date.toLocaleString('en-GB', {
     day: '2-digit',
@@ -80,27 +92,45 @@ export default function SingleListing({
         });
     }
   }
+
   function handleApplicationPress() {
+    if (disabledApply) return;
+    setDisabledApply(true);
     const body = {
       listing_id: listing.list_id,
       vol_user_id: user.vol_id,
     };
-    // if (disabledApply) return;
-    // setDisabledApply(true);
-    // console.log("body:", body);
     postApplications(body, user.token)
       .then(() => {
         console.log('application posted');
         setMyApplications((currVal) => [...currVal, listing]);
-        // setIsApplied(true);
+        setIsApplied(true);
       })
       .catch((err) => {
         console.log('error:', err);
       });
-    // .finally(() => {
-    //   setDisabledApply(false);
-    // });
   }
+
+  // function handleApplicationPress() {
+  //   const body = {
+  //     listing_id: listing.list_id,
+  //     vol_user_id: user.vol_id,
+  //   };
+  //   // if (disabledApply) return;
+  //   // setDisabledApply(true);
+  //   postApplications(body, user.token)
+  //     .then(() => {
+  //       console.log('application posted');
+  //       setMyApplications((currVal) => [...currVal, listing]);
+  //       // setIsApplied(true);
+  //     })
+  //     .catch((err) => {
+  //       console.log('error:', err);
+  //     });
+  //   // .finally(() => {
+  //   //   setDisabledApply(false);
+  //   // });
+  // }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -144,14 +174,14 @@ export default function SingleListing({
           <TouchableOpacity
             style={styles.applyBtn}
             onPress={handleApplicationPress}
-            disabled={disabled}>
+            disabled={disabledApply}>
             <Text
               style={{
                 color: 'white',
                 textAlign: 'center',
                 fontWeight: 'bold',
               }}>
-              Apply
+              {isApplied ? 'Applied' : 'Apply'}
             </Text>
           </TouchableOpacity>
         </View>
