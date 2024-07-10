@@ -39,14 +39,9 @@ export default function SingleListing({
     const appliedListing = myApplications.find(
       (application) => application.listing_id === listing.list_id
     );
-    if (appliedListing) {
-      setIsApplied(true);
-      setDisabledApply(true);
-    } else {
-      setIsApplied(false);
-      setDisabledApply(false);
-    }
-  }, [favourites, myApplications, listing]);
+    setIsApplied(!!appliedListing);
+    setDisabledApply(!!appliedListing);
+  }, [favourites, myApplications, listing.list_id]);
 
   const formattedDate = date.toLocaleString('en-GB', {
     day: '2-digit',
@@ -100,10 +95,9 @@ export default function SingleListing({
       vol_user_id: user.vol_id,
     };
     postApplications(body, user.token)
-      .then(() => {
-        console.log('application posted');
-        setMyApplications((currVal) => [...currVal, listing]);
-        setIsApplied(true);
+      .then((newApplicaton) => {
+        console.log(newApplicaton, '***********application posted');
+        setMyApplications((currVal) => [...currVal, newApplicaton]);
       })
       .catch((err) => {
         console.log('error:', err);
