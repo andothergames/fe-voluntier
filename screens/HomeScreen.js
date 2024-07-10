@@ -11,29 +11,36 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const [listings, setListings] = useState([]);
   const [sortOption, setSortOption] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const { user } = useContext(UserContext);
 
   useEffect(() => {
     fetchListings();
-  }, [sortOption]);
+  }, [sortOption, searchQuery]);
 
   const fetchListings = () => {
-      getListings(sortOption)
-        .then((fetchedListings) => {
-          setListings(fetchedListings);
-        })
-        .catch((error) => {
-          console.error("Error fetching listings:", error);
-        });
+    getListings(sortOption, searchQuery)
+      .then((fetchedListings) => {
+        setListings(fetchedListings);
+      })
+      .catch((error) => {
+        console.error("Error fetching listings:", error);
+      });
   };
 
   const handleSortChange = (option) => {
     setSortOption(option);
   };
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
   return (
     <View style={styles.container}>
-      {user && user.vol_id && <SearchBar onSortChange={handleSortChange} />}
+      {user && user.vol_id && (
+        <SearchBar onSortChange={handleSortChange} onSearch={handleSearch} />
+      )}
       <Listings listings={listings} />
     </View>
   );
