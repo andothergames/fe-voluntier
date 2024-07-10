@@ -139,7 +139,11 @@ export default function SingleListing({
       // Get placeholder image
       if (imagePlaceholders[listing.list_id]) {
         setPlaceholder(imagePlaceholders[listing.list_id])
-      } else {
+      } else if (imagePlaceholders[listing.listing_id]) {
+        //this is because list_id in an application is down as listing_id
+        setPlaceholder(imagePlaceholders[listing.listing_id])
+      }
+      else {
         setPlaceholder(imagePlaceholders[0])
       }
     }
