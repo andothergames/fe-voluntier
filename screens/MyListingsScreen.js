@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../contexts/user-context';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import {
   ScrollView,
@@ -19,6 +20,12 @@ export default function MyListingsScreen({
   myApplications,
   setMyApplications,
 }) {
+
+  const navigation = useNavigation();
+  const handleCardPress = (listing) => {
+    navigation.navigate('SingleListing', { listing });
+  };
+
   // const [favListings, setFavListings] = useState([]);
   // const [myApplications, setMyApplications] = useState([]);
   const { user } = useContext(UserContext);
@@ -54,6 +61,7 @@ export default function MyListingsScreen({
         {favourites.map((listing) => {
           return (
             <TouchableOpacity
+            onPress={() => handleCardPress(listing)}
               style={styles.card}
               key={listing.list_id}>
               <Image
@@ -78,13 +86,15 @@ export default function MyListingsScreen({
         showsHorizontalScrollIndicator={false}>
         {myApplications.map((application) => {
           return (
+
             <TouchableOpacity
+            onPress={() => handleCardPress(application)}
               style={styles.card}
               key={application.listing_id}>
               <Image
                 source={require('../assets/list-img1.png')}
                 style={styles.image}
-              />
+                />
 
               <View style={styles.cardContent}>
                 <Text style={styles.cardTitle}>{application.list_title}</Text>
