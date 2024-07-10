@@ -13,7 +13,7 @@ import {
 
 import { getAuthHeader } from '../api';
 
-export default function MyListingsScreen({favourites, setFavourites}) {
+export default function MyListingsScreen({favourites, setFavourites, }) {
   // const [favListings, setFavListings] = useState([]);
   const [myApplications, setMyApplications] = useState([]);
   const { user } = useContext(UserContext);
@@ -24,19 +24,7 @@ export default function MyListingsScreen({favourites, setFavourites}) {
     // getFavListings(userId);
     getVolApplications(userId);
   }, []);
-console.log(favourites, 'favourites')
-  // const getFavListings = (userId) => {
-  //   userId = user.vol_id;
-  //   axios
-  //     .get(
-  //       `https://voluntier-api.codermatt.com/api/favourites/3/listings`,
-  //       getAuthHeader(user.token)
-  //     )
-  //     .then((data) => setFavListings(data.data.favourite_listings))
-  //     .catch((err) =>
-  //       console.log('error fetching your favourite listings:', err)
-  //     );
-  // };
+
   const getVolApplications = (userId) => {
     userId = user.vol_id;
     // user.vol_id;
@@ -46,7 +34,7 @@ console.log(favourites, 'favourites')
         getAuthHeader(user.token)
       )
       .then((data) =>
-        // console.log(data.data.applications, 'data from applications')
+        
         setMyApplications(data.data.applications)
       )
       .catch((err) =>
@@ -89,7 +77,7 @@ console.log(favourites, 'favourites')
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
         {myApplications.map((application) => {
-          // console.log(application, "here data");
+          
           return (
             <TouchableOpacity
               style={styles.card}
