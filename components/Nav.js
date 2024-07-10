@@ -12,6 +12,7 @@ import HomeScreen from '../screens/HomeScreen';
 import OrgHomeScreen from '../screens/OrgHomeScreen';
 import SingleListing from './SingleListing';
 import Login from './Login';
+import SignUp from './SignUp.js';
 import { getFavourites, getApplications } from '../api.js';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -226,6 +227,14 @@ const StackNavigator = ({
       <Stack.Screen
         name="Login"
         component={Login}
+        options={{
+          headerTitle: null,
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
         options={{
           headerTitle: null,
           headerBackTitleVisible: false,

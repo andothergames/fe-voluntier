@@ -78,4 +78,23 @@ export const loginStyles = StyleSheet.create({
     textAlign: "center",
     color: "#001FFF",
   },
+  signUpText: {
+    textAlign: "center",
+    fontSize: 16,
+  },
+  linkText: {
+    color: "#001FFF"
+  },
+  signUpButton: {
+    marginTop: 10,
+    marginBottom: 40,
+    marginRight: "auto",
+    marginLeft: "auto",
+    backgroundColor: "#7BB9F8",
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    width: '60%',
+    alignContent: "center",
+  }
 });
