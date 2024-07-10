@@ -1,10 +1,10 @@
 // AXIOS ERROR RESPONSE BODY: console.log(err.response.data.msg);
 // SOMETIMES: console.log(err.response.status);
 
-import axios from 'axios';
+import axios from "axios";
 
 const voluntierApi = axios.create({
-  baseURL: 'https://voluntier-api.codermatt.com/api/',
+  baseURL: "https://voluntier-api.codermatt.com/api/",
 });
 
 // const voluntierApi = axios.create({
@@ -20,20 +20,32 @@ export const getAuthHeader = (token) => {
 };
 
 export const login = (body) => {
-  return voluntierApi.post('login', body).then((response) => {
+  return voluntierApi.post("login", body).then((response) => {
     return response.data;
   });
 };
 
-export const getListings = (query = '') => {
-  const endpoint = query ? `listings${query}` : 'listings';
+export const getListings = (sortOption = "", searchQuery = "") => {
+  let endpoint = "listings";
+  const params = [];
 
-  return voluntierApi.get(endpoint)
-    .then(({ data }) => {
-      return data.listings;
-    });
+  if (sortOption) {
+    // Check if sortOption already starts with '?'
+    if (sortOption.startsWith("?")) {
+      params.push(sortOption.substr(1)); // Remove the leading '?' if present
+    } else {
+      params.push(sortOption); // Otherwise, use it as is
+    }
+  }
+
+  if (searchQuery) params.push(`search=${searchQuery}`);
+
+  if (params.length) endpoint += `?${params.join("&")}`;
+
+  return voluntierApi.get(endpoint).then(({ data }) => {
+    return data.listings;
+  });
 };
-
 
 export const getOrgListings = (orgId, token) => {
   return voluntierApi
@@ -44,7 +56,7 @@ export const getOrgListings = (orgId, token) => {
 };
 
 export const getBadges = () => {
-  return voluntierApi.get('badges').then(({ data }) => {
+  return voluntierApi.get("badges").then(({ data }) => {
     return data.badges;
   });
 };
@@ -58,7 +70,7 @@ export const getMyBadges = (volId, token) => {
 };
 
 export const getFavourites = (volUserId, token) => {
-  console.log('In api get favourites!');
+  console.log("In api get favourites!");
 
   return voluntierApi
     .get(`favourites/${volUserId}/listings`, getAuthHeader(token))
@@ -107,7 +119,7 @@ export const deleteFavourite = (list_id, vol_id, token) => {
 // };
 
 export const getBadgeLeaderboard = () => {
-  return voluntierApi.get('leaderboard').then(({ data }) => {
+  return voluntierApi.get("leaderboard").then(({ data }) => {
     return data.leaderboard;
   });
 };
@@ -116,14 +128,14 @@ export const postListing = (listingData, token) => {
   console.log(listingData);
 
   return voluntierApi
-    .post('/listings', listingData, getAuthHeader(token))
+    .post("/listings", listingData, getAuthHeader(token))
     .then(({ data }) => {
       return data.listing;
     });
 };
 
 export const getSkillsOptions = () => {
-  return voluntierApi.get('/skills').then(({ data }) => {
+  return voluntierApi.get("/skills").then(({ data }) => {
     return data.skills;
   });
 };
