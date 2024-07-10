@@ -1,7 +1,7 @@
 import { UserContext } from "../contexts/user-context";
 import { useState, useContext, useEffect } from "react";
 import { View, Text, Pressable, TextInput, Switch, Alert } from "react-native";
-import { createAccount } from "../api";
+import { createVolAccount, createOrgAccount } from "../api";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { loginStyles } from "../styles/loginStyles";
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +13,7 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
+  const [org_name, setOrgName] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("volunteer");
   const [oppRole, setOppRole] = useState("organisation");
@@ -35,11 +36,18 @@ export default function SignUp() {
     setSwitchText(`Switch to ${oppRole}`);
   }, [role]);
 
-  const body = {
+  const volBody = {
     first_name,
     last_name,
     email,
     password,
+  };
+
+  const orgBody = {
+    org_name,
+    email,
+    password,
+    org_type_id: 1
   };
 
   const handleCreateAccount = () => {
@@ -54,6 +62,7 @@ export default function SignUp() {
 
       return;
     }
+    
 
     if (!email.trim().length) {
       alert("Email cannot be empty!");
@@ -70,9 +79,8 @@ export default function SignUp() {
     console.log("Attempting to login!");
     setMessage("");
 
-    createAccount(body)
+    createVolAccount(volBody)
       .then(({ user }) => {
-        console.log(user);
         alert("Account created");
 
         navigation.navigate("Login");
@@ -81,6 +89,46 @@ export default function SignUp() {
         console.log("ERROR: Unable to create account");
       });
   };
+
+  const handleCreateOrgAccount = () => {
+
+    if (!org_name.trim().length) {
+      alert("Organisation Name can not be empty!");
+
+      return;
+    }
+    
+
+    if (!email.trim().length) {
+      alert("Email cannot be empty!");
+
+      return;
+    }
+
+    if (!password.trim().length) {
+      alert("Password cannot be empty!");
+
+      return;
+    }
+
+    setMessage("");
+
+    createOrgAccount(orgBody)
+      .then(({ user }) => {
+        console.log(user);
+        alert("Account created");
+        setOrgName("")
+        setEmail("")
+        setPassword("")
+        navigation.navigate("Login");
+      
+      })
+      .catch((err) => {
+        console.log("ERROR: Unable to create account");
+      });
+
+
+  }
 
   return (
     <SafeAreaView style={loginStyles.container}>
@@ -103,8 +151,8 @@ export default function SignUp() {
             </Text>
             <TextInput
               style={loginStyles.inputControl}
-              value={first_name}
-              onChangeText={(first_name) => setFirstName(first_name)}
+              value={org_name}
+              onChangeText={(org_name) => setOrgName(org_name)}
             />
           </View> : <View style={loginStyles.input}>
             <Text style={loginStyles.inputLabel}>First Name</Text>
@@ -148,11 +196,30 @@ export default function SignUp() {
             />
           </View>
           <Text style={loginStyles.error}>{message}</Text>
-          <View style={loginStyles.buttonContainer}>
-            <Pressable onPress={handleCreateAccount} style={loginStyles.signUpButton}>
-              <Text style={loginStyles.white}>Create Account</Text>
-            </Pressable>
-          </View>
+
+
+          {role === "organisation" ? 
+          <View>
+          <Pressable onPress={handleCreateOrgAccount} style={loginStyles.signUpButton}>
+            <Text style={loginStyles.white}>Create Account</Text>
+          </Pressable>
+        </View>
+
+          : 
+          <View>
+          <Pressable onPress={handleCreateAccount} style={loginStyles.signUpButton}>
+            <Text style={loginStyles.white}>Create Account</Text>
+          </Pressable>
+        </View>
+              
+          }
+
+
+
+          
+
+
+
         </>
       </ScrollView>
     </SafeAreaView>
