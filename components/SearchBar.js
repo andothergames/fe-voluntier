@@ -1,6 +1,5 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
-import { getListings } from "../api";
 import DropDownPicker from "react-native-dropdown-picker";
 
 export default function SearchBar({ onSortChange }) {
@@ -18,7 +17,9 @@ export default function SearchBar({ onSortChange }) {
   }, [value]);
 
   return (
-    <View>
+    <View
+      style={[styles.dropdownContainer, open && styles.dropdownContainerOpen]}
+    >
       <Text>Sort By</Text>
       <DropDownPicker
         open={open}
@@ -27,8 +28,21 @@ export default function SearchBar({ onSortChange }) {
         setOpen={setOpen}
         setValue={setValue}
         setItems={setItems}
+        containerStyle={styles.dropdown}
       />
     </View>
   );
 }
 
+const styles = StyleSheet.create({
+  dropdownContainer: {
+    zIndex: 1000, // Ensure the dropdown is above other components
+    marginBottom: 20,
+  },
+  dropdownContainerOpen: {
+    marginBottom: 150, // Add space below dropdown when open
+  },
+  dropdown: {
+    width: "100%",
+  },
+});
