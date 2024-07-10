@@ -80,7 +80,7 @@ export default function MyListingsScreen({
           return (
             <TouchableOpacity
               style={styles.card}
-              key={application.app_id}>
+              key={application.listing_id}>
               <Image
                 source={require('../assets/list-img1.png')}
                 style={styles.image}
