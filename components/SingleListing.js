@@ -1,15 +1,15 @@
-import { View, ScrollView, Text, Image, TouchableOpacity } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { singleListingStyles as styles } from "../styles/singleListingStyles";
+import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { singleListingStyles as styles } from '../styles/singleListingStyles';
 import {
   postFavourite,
   deleteFavourite,
   getFavourites,
   postApplications,
-} from "../api";
-import { UserContext } from "../contexts/user-context";
-import { useContext, useEffect, useState } from "react";
+} from '../api';
+import { UserContext } from '../contexts/user-context';
+import { useContext, useEffect, useState } from 'react';
 
 export default function SingleListing({
   route,
@@ -26,7 +26,6 @@ export default function SingleListing({
 
   const [disabled, setDisabled] = useState(false);
 
-
   useEffect(() => {
     const favouriteListing = favourites.find(
       (favourite) => favourite.list_id === listing.list_id
@@ -38,15 +37,15 @@ export default function SingleListing({
     }
   }, [favourites]);
 
-  const formattedDate = date.toLocaleString("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
+  const formattedDate = date.toLocaleString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
   });
 
-  const formattedTime = time.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
+  const formattedTime = time.toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: true,
   });
 
@@ -62,7 +61,7 @@ export default function SingleListing({
           setIsFavourite(false);
         })
         .catch((err) => {
-          console.log("error:", err);
+          console.log('error:', err);
         })
         .finally(() => {
           setTimeout(() => setDisabled(false), 2000);
@@ -74,7 +73,7 @@ export default function SingleListing({
           setIsFavourite(true);
         })
         .catch((err) => {
-          console.log("error:", err);
+          console.log('error:', err);
         })
         .finally(() => {
           setTimeout(() => setDisabled(false), 2000);
@@ -88,15 +87,15 @@ export default function SingleListing({
     };
     // if (disabledApply) return;
     // setDisabledApply(true);
-    console.log("body:", body);
+    // console.log("body:", body);
     postApplications(body, user.token)
-      .then((listing) => {
-        console.log("application posted");
+      .then(() => {
+        console.log('application posted');
         setMyApplications((currVal) => [...currVal, listing]);
-        setIsApplied(true);
+        // setIsApplied(true);
       })
       .catch((err) => {
-        console.log("error:", err);
+        console.log('error:', err);
       });
     // .finally(() => {
     //   setDisabledApply(false);
@@ -110,18 +109,19 @@ export default function SingleListing({
         <Text style={styles.orgName}>{listing.org_name}</Text>
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        ></View>
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}></View>
 
         <View style={styles.favourite}>
-          <TouchableOpacity onPress={handleFavouritePress} disabled={disabled}>
+          <TouchableOpacity
+            onPress={handleFavouritePress}
+            disabled={disabled}>
             <FontAwesomeIcon
               icon={faHeart}
               size={35}
-              style={{ color: isFavourite ? "#ff0505" : "#FFC1C1" }}
+              style={{ color: isFavourite ? '#ff0505' : '#FFC1C1' }}
             />
           </TouchableOpacity>
         </View>
@@ -133,27 +133,24 @@ export default function SingleListing({
 
         <View>
           <Image
-            source={require("../assets/listing-image.jpg")}
-            style={styles.image}
-          >
+            source={require('../assets/listing-image.jpg')}
+            style={styles.image}>
             {listing.list_img}
           </Image>
         </View>
         <Text style={styles.titleText}>What you'll be doing:</Text>
         <Text style={styles.text}>{listing.list_description}</Text>
-        <View style={{ marginHorizontal: "auto" }}>
+        <View style={{ marginHorizontal: 'auto' }}>
           <TouchableOpacity
             style={styles.applyBtn}
             onPress={handleApplicationPress}
-            disabled={disabled}
-          >
+            disabled={disabled}>
             <Text
               style={{
-                color: "white",
-                textAlign: "center",
-                fontWeight: "bold",
-              }}
-            >
+                color: 'white',
+                textAlign: 'center',
+                fontWeight: 'bold',
+              }}>
               Apply
             </Text>
           </TouchableOpacity>

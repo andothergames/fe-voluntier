@@ -13,34 +13,36 @@ import {
 
 import { getAuthHeader } from '../api';
 
-export default function MyListingsScreen({favourites, setFavourites, }) {
+export default function MyListingsScreen({
+  favourites,
+  setFavourites,
+  myApplications,
+  setMyApplications,
+}) {
   // const [favListings, setFavListings] = useState([]);
-  const [myApplications, setMyApplications] = useState([]);
+  // const [myApplications, setMyApplications] = useState([]);
   const { user } = useContext(UserContext);
 
   const userId = user.vol_id;
 
-  useEffect(() => {
-    // getFavListings(userId);
-    getVolApplications(userId);
-  }, []);
+  // useEffect(() => {
+  //   // getFavListings(userId);
+  //   getVolApplications(userId);
+  // }, []);
 
-  const getVolApplications = (userId) => {
-    userId = user.vol_id;
-    // user.vol_id;
-    axios
-      .get(
-        `https://voluntier-api.codermatt.com/api/applications/vol/${userId}`,
-        getAuthHeader(user.token)
-      )
-      .then((data) =>
-        
-        setMyApplications(data.data.applications)
-      )
-      .catch((err) =>
-        console.log('error fetching your favourite listings:', err)
-      );
-  };
+  // const getVolApplications = (userId) => {
+  //   userId = user.vol_id;
+  //   // user.vol_id;
+  //   axios
+  //     .get(
+  //       `https://voluntier-api.codermatt.com/api/applications/vol/${userId}`,
+  //       getAuthHeader(user.token)
+  //     )
+  //     .then((data) => setMyApplications(data.data.applications))
+  //     .catch((err) =>
+  //       console.log('error fetching your favourite listings:', err)
+  //     );
+  // };
 
   return (
     <ScrollView style={styles.container}>
@@ -49,9 +51,7 @@ export default function MyListingsScreen({favourites, setFavourites, }) {
         style={styles.scrollView}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
-
         {favourites.map((listing) => {
-          
           return (
             <TouchableOpacity
               style={styles.card}
@@ -77,11 +77,10 @@ export default function MyListingsScreen({favourites, setFavourites, }) {
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
         {myApplications.map((application) => {
-          
           return (
             <TouchableOpacity
               style={styles.card}
-              key={application.listing_id}>
+              key={application.app_id}>
               <Image
                 source={require('../assets/list-img1.png')}
                 style={styles.image}
