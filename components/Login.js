@@ -7,6 +7,7 @@ import { loginStyles } from "../styles/loginStyles";
 import { useNavigation } from "@react-navigation/native";
 
 import { LogoutForm } from "./LogoutForm";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function Login() {
   // FOR TESTING: this is a valid user to log into the app as vol/org
@@ -74,7 +75,7 @@ export default function Login() {
         navigation.navigate("Home");
       })
       .catch((err) => {
-        console.log("ERRROR: Unable to login!");
+        console.log("ERROR: Unable to login!");
 
         if (err.response.status === 401 || err.response.status === 404) {
           console.log(err.response.data.msg);
@@ -91,7 +92,7 @@ export default function Login() {
         console.log(err.response.data.msg);
         console.log(err.response.status);
 
-        const str = "An unknow error occurred whilst logging in!";
+        const str = "An unknown error occurred whilst logging in!";
         alert(str);
         setMessage(str);
       });
@@ -107,9 +108,14 @@ export default function Login() {
     navigation.navigate("Home");
   };
 
+  const handleSignUp = () => {
+    navigation.navigate("SignUp");
+  };
+
+
   return (
     <SafeAreaView style={loginStyles.container}>
-      <View style={loginStyles.form}>
+      <ScrollView style={loginStyles.form}>
         {!user ? (
           <>
             <Text style={loginStyles.title}>{`Sign in as ${role}`}</Text>
@@ -139,6 +145,10 @@ export default function Login() {
                 onChangeText={(password) => setPassword(password)}
               />
             </View>
+            <View>
+              <Text style={loginStyles.signUpText}>Don't have an account? <Text style={loginStyles.linkText}onPress={handleSignUp}>Sign Up</Text></Text>
+              
+            </View>
             <Text style={loginStyles.error}>{message}</Text>
             <View style={loginStyles.buttonContainer}>
               <Pressable onPress={handleSubmitLogin} style={loginStyles.button}>
@@ -149,7 +159,7 @@ export default function Login() {
         ) : (
           <LogoutForm handleSubmitLogout={handleSubmitLogout} user={user} />
         )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

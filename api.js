@@ -18,6 +18,14 @@ export const login = (body) => {
   });
 };
 
+export const createAccount = (body) => {
+  return voluntierApi.post("vol", body).then((response) => {
+    return response.data;
+  });
+};
+
+
+
 export const getListings = (sortOption = "", searchQuery = "") => {
   let endpoint = "listings";
   const params = [];
