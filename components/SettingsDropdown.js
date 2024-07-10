@@ -13,7 +13,7 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="About us" component={About} />
       <Drawer.Screen name="Contact us" component={Contact} />
-      <Drawer.Screen name="Delete account" component={DeleteAccount} />
+      {/* <Drawer.Screen name="Delete account" component={DeleteAccount} /> */}
     </Drawer.Navigator>
   );
 }
