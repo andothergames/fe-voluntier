@@ -65,7 +65,7 @@ export default function MyListingsScreen({
               style={styles.card}
               key={listing.list_id}>
               <Image
-                source={require('../assets/list-img1.png')}
+                source={require('../assets/images/garden-cleanup.jpg')}
                 style={styles.image}
               />
 
@@ -92,7 +92,7 @@ export default function MyListingsScreen({
               style={styles.card}
               key={application.listing_id}>
               <Image
-                source={require('../assets/list-img1.png')}
+                source={require('../assets/images/food-bank.jpg')}
                 style={styles.image}
                 />
 
